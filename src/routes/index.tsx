@@ -59,14 +59,14 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
   const shown = lists.slice(0, 8);
 
   return (
-    <section className="shrink-0 rounded-md border border-foreground/25 bg-card/30">
-      <div className="grid grid-cols-4 divide-foreground/20 sm:grid-cols-8 sm:divide-x">
+    <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-warning/40 bg-card/60 backdrop-blur">
+      <div className="grid grid-cols-4 divide-foreground/15 sm:grid-cols-8 sm:divide-x">
         {shown.map((list) => (
           <div key={list.id} className="flex min-w-0 flex-col justify-center px-2 py-2 leading-tight">
-            <span className="w-full truncate font-mono text-[0.7rem] text-foreground/80">
+            <span className="w-full truncate font-mono text-[0.7rem] text-muted-foreground">
               {list.operatorId}
             </span>
-            <span className="w-full truncate font-mono text-base font-semibold text-foreground">
+            <span className="w-full truncate font-mono text-base font-black text-warning">
               {list.listId}
             </span>
           </div>
@@ -75,6 +75,7 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
     </section>
   );
 }
+
 
 function ListTracker() {
   const initialData = Route.useLoaderData();
