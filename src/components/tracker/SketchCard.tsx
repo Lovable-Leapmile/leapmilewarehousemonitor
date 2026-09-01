@@ -36,28 +36,26 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         >
           {tail}
         </span>
-        <div className="my-2 h-px w-full bg-foreground/20" />
-        <span className="font-mono text-xl text-foreground/85 sm:text-2xl">{list.operatorId}</span>
-
-        {/* letter badge, straddling the divider like in the sketch */}
-        <span
-          className={cn(
-            "absolute -right-6 top-1/2 grid size-12 -translate-y-1/2 rotate-45 place-items-center rounded-md border-2 shadow-lg",
-            ready
-              ? "border-success bg-success text-success-foreground"
-              : "border-warning bg-warning text-warning-foreground"
-          )}
-        >
-          <span className="-rotate-45 font-sans text-3xl font-black uppercase tracking-tight">
-            {list.listLetter}
+        {/* divider — the letter badge sits where it meets the vertical rule */}
+        <div className="relative my-3 h-px w-full bg-foreground/20">
+          <span
+            className={cn(
+              "absolute -right-[2.35rem] top-1/2 grid size-[3.25rem] -translate-y-1/2 rotate-45 place-items-center rounded-md border-2 shadow-lg",
+              "border-brand bg-brand text-background"
+            )}
+          >
+            <span className="-rotate-45 font-sans text-3xl font-black uppercase tracking-tight">
+              {list.listLetter}
+            </span>
           </span>
-        </span>
+        </div>
+        <span className="font-mono text-2xl text-foreground/90 sm:text-3xl">{list.operatorId}</span>
       </div>
 
       <SketchStations
         sides={list.sides}
         tone={ready ? "success" : "warning"}
-        className="min-w-0 flex-1 pl-4 sm:pl-6"
+        className="min-w-0 flex-1 pl-9 sm:pl-12"
       />
     </article>
   );
