@@ -1,12 +1,21 @@
 import { cn } from "@/lib/utils";
 import type { TrackerList } from "@/lib/tracker-types";
 import { SketchStations } from "./SketchStations";
+import { LetterBadge } from "./LetterBadge";
 
 /**
  * Card modelled on the hand-drawn sketch: ID block on the left, circled
  * station numbers on the right — styled with the board's neon theme.
  */
-export function SketchCard({ list, className }: { list: TrackerList; className?: string }) {
+export function SketchCard({
+  list,
+  letter,
+  className,
+}: {
+  list: TrackerList;
+  letter?: string;
+  className?: string;
+}) {
   const ready = list.status === "ready";
   const head = list.listId.slice(0, -3);
   const tail = list.listId.slice(-3);
@@ -24,7 +33,14 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[10rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 px-3 text-center leading-none sm:w-[14rem]">
+      <div className="relative ml-1 flex w-[11rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 px-3 text-center leading-none sm:w-[15.5rem]">
+        {/* letter badge sits at the top of the vertical rule */}
+        <LetterBadge
+          letter={letter ?? list.listLetter}
+          className="absolute -right-[1.65rem] top-0 size-[3.25rem]"
+          textClassName="text-3xl"
+        />
+
         <span className="font-mono text-xl tracking-[0.12em] text-foreground/85 sm:text-2xl">
           {head}
         </span>
@@ -36,20 +52,10 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         >
           {tail}
         </span>
-        {/* divider — the letter badge sits where it meets the vertical rule */}
-        <div className="relative my-3 h-px w-full bg-foreground/20">
-          <span
-            className={cn(
-              "absolute -right-[2.35rem] top-1/2 grid size-[3.25rem] -translate-y-1/2 rotate-45 place-items-center rounded-md border-2 shadow-lg",
-              "border-brand bg-brand text-background"
-            )}
-          >
-            <span className="-rotate-45 font-sans text-3xl font-black uppercase tracking-tight">
-              {list.listLetter}
-            </span>
-          </span>
-        </div>
-        <span className="font-mono text-2xl text-foreground/90 sm:text-3xl">{list.operatorId}</span>
+        <div className="my-3 h-px w-full bg-foreground/20" />
+        <span className="w-full whitespace-nowrap font-mono text-2xl tracking-[0.08em] text-foreground/90 sm:text-[2rem]">
+          {list.operatorId}
+        </span>
       </div>
 
       <SketchStations
@@ -60,3 +66,4 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
     </article>
   );
 }
+
