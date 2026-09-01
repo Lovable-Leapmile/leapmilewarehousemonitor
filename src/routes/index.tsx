@@ -111,12 +111,12 @@ function ListTracker() {
         <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-2 sm:gap-3">
           {readySlots.map((list, i) =>
             list ? (
-              <SketchCard key={list.id} list={list} />
+              <SketchCard key={list.id} list={list} className="h-full" />
             ) : (
               <div
                 key={i}
                 className={cn(
-                  "min-h-[6rem] rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
+                  "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
                 )}
               />
             )
