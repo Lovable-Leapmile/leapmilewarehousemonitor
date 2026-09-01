@@ -112,8 +112,9 @@ function ListTracker() {
               <SketchCard
                 key={list.id}
                 list={list}
-                className={i === 4 ? "sm:col-span-2" : undefined}
+                className={i === 4 ? "sm:col-span-2" : ""}
               />
+
             ) : (
               <div
                 key={i}
