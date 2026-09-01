@@ -58,13 +58,13 @@ function placeSlots(
 
 const PIGEON_LETTERS = "ABCDEFGHIJKL".split("");
 
-/** Pigeon-hole row: collected lists waiting for the picker, 12 in one row. */
+/** Pigeon-hole row: collected lists waiting for the picker, 8 in one row. */
 function PigeonRow({ lists }: { lists: TrackerList[] }) {
-  const shown = lists.slice(0, 12);
+  const shown = lists.slice(0, 8);
 
   return (
     <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-success/40 bg-card/60 backdrop-blur">
-      <div className="grid grid-cols-6 divide-y divide-foreground/15 md:grid-cols-12 md:divide-y-0">
+      <div className="grid grid-cols-4 divide-y divide-foreground/15 md:grid-cols-8 md:divide-y-0">
         {shown.map((list, i) => (
           <div
             key={`pigeon-${list.id}`}
@@ -144,7 +144,7 @@ function ListTracker() {
 
         <div className="border-t border-foreground/20" />
 
-        <PigeonRow lists={ready.length >= 12 ? ready : [...ready, ...pending]} />
+        <PigeonRow lists={ready.length >= 8 ? ready : [...ready, ...pending]} />
       </div>
     </main>
   );
