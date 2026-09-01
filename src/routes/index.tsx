@@ -106,9 +106,9 @@ function ListTracker() {
       <h1 className="sr-only">Warehouse task monitoring dashboard</h1>
 
       {/* outer bordered container, as in the sketch */}
-      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-3 rounded-2xl border-2 border-border/60 bg-card/40 p-3 backdrop-blur sm:gap-4 sm:p-4">
+      <div className="relative mx-auto flex min-h-0 w-full flex-1 flex-col gap-2 rounded-2xl border-2 border-border/60 bg-card/40 p-2 backdrop-blur sm:gap-3 sm:p-3">
         {/* 2×2 grid of ready cards (A–D) */}
-        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+        <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-2 sm:gap-3">
           {readySlots.map((list, i) =>
             list ? (
               <SketchCard key={list.id} list={list} />
