@@ -65,28 +65,37 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
   return (
     <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-success/40 bg-card/60 backdrop-blur">
       <div className="grid grid-cols-4 divide-y divide-foreground/15 md:grid-cols-8 md:divide-y-0">
-        {shown.map((list, i) => (
-          <div
-            key={`pigeon-${list.id}`}
-            className="relative flex min-w-0 flex-col items-center justify-center border-r border-foreground/15 px-3 py-8 text-center leading-none"
-          >
-            <LetterBadge
-              letter={PIGEON_LETTERS[i] ?? "A"}
-              className="absolute right-1.5 top-1.5 size-9"
-              textClassName="text-xl"
-            />
-            <span className="w-full truncate font-mono text-4xl font-black text-success">
-              {list.listId}
-            </span>
-            <span className="mt-2 w-full truncate font-mono text-2xl tracking-[0.06em] text-muted-foreground">
-              {list.operatorId}
-            </span>
-          </div>
-        ))}
+        {shown.map((list, i) => {
+          const head = list.listId.slice(0, -3);
+          const tail = list.listId.slice(-3);
+          return (
+            <div
+              key={`pigeon-${list.id}`}
+              className="relative flex min-w-0 flex-col items-center justify-center gap-1 border-r border-foreground/15 px-2 py-5 text-center leading-none last:border-r-0"
+            >
+              <LetterBadge
+                letter={PIGEON_LETTERS[i] ?? "A"}
+                className="mx-auto size-9"
+                textClassName="text-xl"
+              />
+              <span className="mt-2 w-full truncate font-mono text-sm tracking-[0.12em] text-foreground/80">
+                {head}
+              </span>
+              <span className="w-full truncate font-mono text-4xl font-black tracking-tight text-success">
+                {tail}
+              </span>
+              <div className="my-1 h-px w-2/3 bg-foreground/20" />
+              <span className="w-full truncate font-mono text-lg tracking-[0.06em] text-foreground/90">
+                {list.operatorId}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
+
 
 const READY_LETTERS = "GHIJKL".split("");
 
