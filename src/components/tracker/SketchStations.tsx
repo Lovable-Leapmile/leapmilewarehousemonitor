@@ -1,0 +1,58 @@
+import { STATIONS_PER_SIDE, SIDES, type Side } from "@/lib/tracker-types";
+import { cn } from "@/lib/utils";
+
+const OFFSET: Record<Side, number> = { A: 0, B: STATIONS_PER_SIDE };
+
+function reachedStations(sides: Record<Side, boolean[]>) {
+  const out: number[] = [];
+  for (const side of SIDES) {
+    const slots = sides[side];
+    for (let i = slots.length - 1; i >= 0; i--) {
+      if (slots[i] === true) out.push(STATIONS_PER_SIDE - i + OFFSET[side]);
+    }
+  }
+  return out;
+}
+
+/**
+ * Hand-drawn style station markers: a wrapping run of circled numbers.
+ * Deliberately low-contrast between neighbours — sizes, weights, opacity and
+ * baseline nudges vary subtly so the values need a closer look.
+ */
+const SIZES = ["size-9", "size-[2.35rem]", "size-10", "size-[2.15rem]"];
+const TEXTS = ["text-[0.8rem]", "text-[0.84rem]", "text-[0.78rem]", "text-[0.82rem]"];
+const WEIGHTS = ["font-medium", "font-semibold", "font-normal", "font-medium"];
+const FADES = ["opacity-90", "opacity-75", "opacity-100", "opacity-80"];
+const NUDGES = ["translate-y-0", "translate-y-[1px]", "-translate-y-[1px]", "translate-y-0"];
+const BORDERS = ["border", "border-[1.5px]", "border", "border-[1.25px]"];
+
+export function SketchStations({
+  sides,
+  className,
+}: {
+  sides: Record<Side, boolean[]>;
+  className?: string;
+}) {
+  const stations = reachedStations(sides);
+
+  return (
+    <ul className={cn("flex flex-wrap content-start items-center gap-x-2 gap-y-2", className)}>
+      {stations.map((n, i) => (
+        <li
+          key={n}
+          className={cn(
+            "grid shrink-0 place-items-center rounded-full border-foreground/45 font-mono tabular-nums text-foreground",
+            SIZES[i % SIZES.length],
+            TEXTS[i % TEXTS.length],
+            WEIGHTS[i % WEIGHTS.length],
+            FADES[i % FADES.length],
+            NUDGES[i % NUDGES.length],
+            BORDERS[i % BORDERS.length]
+          )}
+        >
+          {n}
+        </li>
+      ))}
+    </ul>
+  );
+}
