@@ -130,7 +130,7 @@ function ListTracker() {
 
 
         <div className="flex items-baseline justify-between border-t border-foreground/20 pt-3">
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-warning">
             In Progress
           </span>
           <span className="font-mono text-xs text-muted-foreground">{pending.length} lists</span>
