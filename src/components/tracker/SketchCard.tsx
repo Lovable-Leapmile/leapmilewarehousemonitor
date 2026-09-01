@@ -55,7 +55,7 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
       <SketchStations
         sides={list.sides}
         tone={ready ? "success" : "warning"}
-        className="min-w-0 flex-1"
+        className="min-w-0 flex-1 pl-4 sm:pl-6"
       />
     </article>
   );
