@@ -56,27 +56,6 @@ function placeSlots(
   return slots.map((id) => (id ? byId.get(id) ?? null : null));
 }
 
-function PendingStrip({ lists }: { lists: TrackerList[] }) {
-  const shown = lists.slice(0, 6);
-
-  return (
-    <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-warning/40 bg-card/60 backdrop-blur">
-      <div className="grid grid-cols-3 divide-foreground/15 sm:grid-cols-6 sm:divide-x">
-        {shown.map((list) => (
-          <div key={list.id} className="flex min-w-0 flex-col justify-center px-3 py-5 leading-tight sm:px-4 sm:py-6">
-            <span className="w-full truncate font-mono text-xl text-muted-foreground">
-              {list.operatorId}
-            </span>
-            <span className="w-full truncate font-mono text-4xl font-black text-warning">
-              {list.listId}
-            </span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 const PIGEON_LETTERS = "ABCDEFGHIJKL".split("");
 
 /** Pigeon-hole row: collected lists waiting for the picker, 12 in one row. */
