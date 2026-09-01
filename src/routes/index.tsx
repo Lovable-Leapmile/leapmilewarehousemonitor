@@ -94,7 +94,7 @@ function ListTracker() {
   const readySlots = placeSlots(slotsRef.current, ready, byId);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background p-3 sm:p-5">
+    <main className="relative flex h-screen flex-col overflow-hidden bg-background p-2 sm:p-3">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:64px_64px]"
