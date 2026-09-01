@@ -89,17 +89,17 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
         {shown.map((list, i) => (
           <div
             key={`pigeon-${list.id}`}
-            className="relative flex min-w-0 flex-col items-center justify-center border-r border-foreground/15 px-2 py-4 text-center leading-none"
+            className="relative flex min-w-0 flex-col items-center justify-center border-r border-foreground/15 px-3 py-8 text-center leading-none"
           >
             <LetterBadge
               letter={PIGEON_LETTERS[i] ?? "A"}
-              className="absolute right-1 top-1 size-6"
-              textClassName="text-sm"
+              className="absolute right-1.5 top-1.5 size-9"
+              textClassName="text-xl"
             />
-            <span className="w-full truncate font-mono text-2xl font-black text-success">
+            <span className="w-full truncate font-mono text-4xl font-black text-success">
               {list.listId}
             </span>
-            <span className="mt-1 w-full truncate font-mono text-base tracking-[0.06em] text-muted-foreground">
+            <span className="mt-2 w-full truncate font-mono text-2xl tracking-[0.06em] text-muted-foreground">
               {list.operatorId}
             </span>
           </div>
@@ -164,8 +164,6 @@ function ListTracker() {
 
 
         <div className="border-t border-foreground/20" />
-
-        <PendingStrip lists={pending} />
 
         <PigeonRow lists={ready.length >= 12 ? ready : [...ready, ...pending]} />
       </div>
