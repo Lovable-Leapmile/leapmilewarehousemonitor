@@ -76,6 +76,39 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
   );
 }
 
+const PIGEON_LETTERS = "ABCDEFGHIJKL".split("");
+
+/** Pigeon-hole row: collected lists waiting for the picker, 12 in one row. */
+function PigeonRow({ lists }: { lists: TrackerList[] }) {
+  const shown = lists.slice(0, 12);
+
+  return (
+    <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-success/40 bg-card/60 backdrop-blur">
+      <div className="grid grid-cols-6 divide-y divide-foreground/15 md:grid-cols-12 md:divide-y-0">
+        {shown.map((list, i) => (
+          <div
+            key={`pigeon-${list.id}`}
+            className="relative flex min-w-0 flex-col items-center justify-center border-r border-foreground/15 px-2 py-4 text-center leading-none"
+          >
+            <LetterBadge
+              letter={PIGEON_LETTERS[i] ?? "A"}
+              className="absolute right-1 top-1 size-6"
+              textClassName="text-sm"
+            />
+            <span className="w-full truncate font-mono text-2xl font-black text-success">
+              {list.listId}
+            </span>
+            <span className="mt-1 w-full truncate font-mono text-base tracking-[0.06em] text-muted-foreground">
+              {list.operatorId}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const READY_LETTERS = "GHIJKL".split("");
 
 function ListTracker() {
   const initialData = Route.useLoaderData();
@@ -107,11 +140,16 @@ function ListTracker() {
 
       {/* outer bordered container, as in the sketch */}
       <div className="relative mx-auto flex min-h-0 w-full flex-1 flex-col gap-2 rounded-2xl border-2 border-border/60 bg-card/40 p-2 backdrop-blur sm:gap-3 sm:p-3">
-        {/* 2×2 grid of ready cards (A–D) */}
+        {/* 2×3 grid of ready cards */}
         <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-3 gap-2 sm:gap-3">
           {readySlots.map((list, i) =>
             list ? (
-              <SketchCard key={list.id} list={list} className="h-full" />
+              <SketchCard
+                key={list.id}
+                list={list}
+                letter={READY_LETTERS[i] ?? list.listLetter}
+                className="h-full"
+              />
             ) : (
               <div
                 key={i}
@@ -127,8 +165,11 @@ function ListTracker() {
         <div className="border-t border-foreground/20" />
 
         <PendingStrip lists={pending} />
+
+        <PigeonRow lists={ready.length >= 12 ? ready : [...ready, ...pending]} />
       </div>
     </main>
   );
 }
+
 
