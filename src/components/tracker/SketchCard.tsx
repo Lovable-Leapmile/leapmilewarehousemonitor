@@ -24,7 +24,7 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[9rem] shrink-0 flex-col justify-center border-r border-foreground/20 pr-3 leading-none sm:w-40">
+      <div className="relative ml-1 flex w-[7.25rem] shrink-0 flex-col justify-center border-r border-foreground/20 pr-3 leading-none sm:w-[8.5rem]">
         <span className="font-mono text-lg tracking-[0.12em] text-foreground/85">{head}</span>
         <span
           className={cn(
@@ -40,11 +40,15 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         {/* letter badge, straddling the divider like in the sketch */}
         <span
           className={cn(
-            "absolute -right-3.5 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full border bg-background font-mono text-sm font-black",
-            ready ? "border-success/70 text-success" : "border-warning/70 text-warning"
+            "absolute -right-5 top-1/2 grid size-10 -translate-y-1/2 rotate-45 place-items-center rounded-md border-2 shadow-lg",
+            ready
+              ? "border-success bg-success/20 text-success"
+              : "border-warning bg-warning/20 text-warning"
           )}
         >
-          {list.listLetter}
+          <span className="-rotate-45 font-sans text-2xl font-black italic uppercase tracking-tight">
+            {list.listLetter}
+          </span>
         </span>
       </div>
 
