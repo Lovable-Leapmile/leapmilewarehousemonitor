@@ -28,12 +28,18 @@ const BORDERS = ["border", "border-[1.5px]", "border", "border-[1.25px]"];
 
 export function SketchStations({
   sides,
+  tone = "success",
   className,
 }: {
   sides: Record<Side, boolean[]>;
+  tone?: "success" | "warning";
   className?: string;
 }) {
   const stations = reachedStations(sides);
+  const circle =
+    tone === "warning"
+      ? "border-warning/70 bg-warning/10 text-warning"
+      : "border-success/70 bg-success/10 text-success";
 
   return (
     <ul className={cn("flex flex-wrap content-start items-center gap-x-2 gap-y-2", className)}>
@@ -41,7 +47,8 @@ export function SketchStations({
         <li
           key={n}
           className={cn(
-            "grid shrink-0 place-items-center rounded-full border-foreground/45 font-mono tabular-nums text-foreground",
+            "grid shrink-0 place-items-center rounded-full font-mono tabular-nums",
+            circle,
             SIZES[i % SIZES.length],
             TEXTS[i % TEXTS.length],
             WEIGHTS[i % WEIGHTS.length],
