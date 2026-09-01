@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
   component: ListTracker,
 });
 
-const READY_SLOTS = 5;
+const READY_SLOTS = 4;
 
 function placeSlots(
   slots: (string | null)[],
@@ -59,14 +59,14 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
   const shown = lists.slice(0, 8);
 
   return (
-    <section className="shrink-0 rounded-md border border-foreground/25 bg-card/30">
-      <div className="grid grid-cols-4 divide-foreground/20 sm:grid-cols-8 sm:divide-x">
+    <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-warning/40 bg-card/60 backdrop-blur">
+      <div className="grid grid-cols-4 divide-foreground/15 sm:grid-cols-8 sm:divide-x">
         {shown.map((list) => (
           <div key={list.id} className="flex min-w-0 flex-col justify-center px-2 py-2 leading-tight">
-            <span className="w-full truncate font-mono text-[0.7rem] text-foreground/80">
+            <span className="w-full truncate font-mono text-[0.7rem] text-muted-foreground">
               {list.operatorId}
             </span>
-            <span className="w-full truncate font-mono text-base font-semibold text-foreground">
+            <span className="w-full truncate font-mono text-base font-black text-warning">
               {list.listId}
             </span>
           </div>
@@ -75,6 +75,7 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
     </section>
   );
 }
+
 
 function ListTracker() {
   const initialData = Route.useLoaderData();
@@ -93,42 +94,43 @@ function ListTracker() {
   const readySlots = placeSlots(slotsRef.current, ready, byId);
 
   return (
-    <main className="min-h-screen bg-background p-3 sm:p-5">
+    <main className="relative min-h-screen overflow-hidden bg-background p-3 sm:p-5">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:64px_64px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-1/3 left-1/2 size-[70vw] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--brand)_22%,transparent),transparent_65%)] blur-3xl"
+      />
       <h1 className="sr-only">Warehouse task monitoring dashboard</h1>
 
       {/* outer bordered container, as in the sketch */}
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-3 rounded-lg border border-foreground/30 p-3 sm:gap-4 sm:p-4">
+      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-3 rounded-2xl border-2 border-border/60 bg-card/40 p-3 backdrop-blur sm:gap-4 sm:p-4">
         <div className="flex items-baseline justify-between">
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            Ready
-          </span>
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-success">Ready</span>
           <span className="font-mono text-xs text-muted-foreground">{ready.length} lists</span>
         </div>
 
-        {/* 2×2 grid of ready cards (A–D), fifth list spans the full width */}
+        {/* 2×2 grid of ready cards (A–D) */}
         <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {readySlots.map((list, i) =>
             list ? (
-              <SketchCard
-                key={list.id}
-                list={list}
-                className={i === 4 ? "sm:col-span-2" : ""}
-              />
-
+              <SketchCard key={list.id} list={list} />
             ) : (
               <div
                 key={i}
                 className={cn(
-                  "min-h-[6rem] rounded-md border border-dashed border-foreground/20",
-                  i === 4 && "sm:col-span-2"
+                  "min-h-[6rem] rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
                 )}
               />
             )
           )}
         </section>
 
+
         <div className="flex items-baseline justify-between border-t border-foreground/20 pt-3">
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-warning">
             In Progress
           </span>
           <span className="font-mono text-xs text-muted-foreground">{pending.length} lists</span>
