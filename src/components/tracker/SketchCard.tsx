@@ -24,7 +24,7 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[10rem] shrink-0 flex-col justify-center border-r border-foreground/20 pr-3 leading-none sm:w-[14rem]">
+      <div className="relative ml-1 flex w-[10rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 px-3 text-center leading-none sm:w-[14rem]">
         <span className="font-mono text-xl tracking-[0.12em] text-foreground/85 sm:text-2xl">
           {head}
         </span>
