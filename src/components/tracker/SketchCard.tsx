@@ -42,8 +42,8 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
           className={cn(
             "absolute -right-5 top-1/2 grid size-10 -translate-y-1/2 rotate-45 place-items-center rounded-md border-2 shadow-lg",
             ready
-              ? "border-success bg-success/20 text-success"
-              : "border-warning bg-warning/20 text-warning"
+              ? "border-success bg-success text-success-foreground"
+              : "border-warning bg-warning text-warning-foreground"
           )}
         >
           <span className="-rotate-45 font-sans text-2xl font-black italic uppercase tracking-tight">
@@ -55,7 +55,7 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
       <SketchStations
         sides={list.sides}
         tone={ready ? "success" : "warning"}
-        className="min-w-0 flex-1"
+        className="min-w-0 flex-1 pl-4 sm:pl-6"
       />
     </article>
   );
