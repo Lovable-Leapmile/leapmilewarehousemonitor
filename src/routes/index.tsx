@@ -63,10 +63,10 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
       <div className="grid grid-cols-4 divide-foreground/15 sm:grid-cols-8 sm:divide-x">
         {shown.map((list) => (
           <div key={list.id} className="flex min-w-0 flex-col justify-center px-2 py-2 leading-tight">
-            <span className="w-full truncate font-mono text-[0.7rem] text-muted-foreground">
+            <span className="w-full truncate font-mono text-sm text-muted-foreground">
               {list.operatorId}
             </span>
-            <span className="w-full truncate font-mono text-base font-black text-warning">
+            <span className="w-full truncate font-mono text-xl font-black text-warning">
               {list.listId}
             </span>
           </div>
@@ -107,11 +107,6 @@ function ListTracker() {
 
       {/* outer bordered container, as in the sketch */}
       <div className="relative mx-auto flex max-w-[1400px] flex-col gap-3 rounded-2xl border-2 border-border/60 bg-card/40 p-3 backdrop-blur sm:gap-4 sm:p-4">
-        <div className="flex items-baseline justify-between">
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-success">Ready</span>
-          <span className="font-mono text-xs text-muted-foreground">{ready.length} lists</span>
-        </div>
-
         {/* 2×2 grid of ready cards (A–D) */}
         <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {readySlots.map((list, i) =>
@@ -129,12 +124,7 @@ function ListTracker() {
         </section>
 
 
-        <div className="flex items-baseline justify-between border-t border-foreground/20 pt-3">
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-warning">
-            In Progress
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">{pending.length} lists</span>
-        </div>
+        <div className="border-t border-foreground/20" />
 
         <PendingStrip lists={pending} />
       </div>

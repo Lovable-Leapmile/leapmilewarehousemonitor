@@ -19,8 +19,8 @@ function reachedStations(sides: Record<Side, boolean[]>) {
  * Deliberately low-contrast between neighbours — sizes, weights, opacity and
  * baseline nudges vary subtly so the values need a closer look.
  */
-const SIZES = ["size-9", "size-[2.35rem]", "size-10", "size-[2.15rem]"];
-const TEXTS = ["text-[0.8rem]", "text-[0.84rem]", "text-[0.78rem]", "text-[0.82rem]"];
+const SIZES = ["size-12", "size-[3.1rem]", "size-13", "size-[2.9rem]"];
+const TEXTS = ["text-[1.15rem]", "text-[1.2rem]", "text-[1.1rem]", "text-[1.18rem]"];
 const WEIGHTS = ["font-medium", "font-semibold", "font-normal", "font-medium"];
 const FADES = ["opacity-90", "opacity-75", "opacity-100", "opacity-80"];
 const NUDGES = ["translate-y-0", "translate-y-[1px]", "-translate-y-[1px]", "translate-y-0"];
