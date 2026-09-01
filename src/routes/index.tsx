@@ -62,11 +62,11 @@ function PendingStrip({ lists }: { lists: TrackerList[] }) {
     <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-warning/40 bg-card/60 backdrop-blur">
       <div className="grid grid-cols-4 divide-foreground/15 sm:grid-cols-8 sm:divide-x">
         {shown.map((list) => (
-          <div key={list.id} className="flex min-w-0 flex-col justify-center px-2 py-2 leading-tight">
-            <span className="w-full truncate font-mono text-sm text-muted-foreground">
+          <div key={list.id} className="flex min-w-0 flex-col justify-center px-2 py-2.5 leading-tight">
+            <span className="w-full truncate font-mono text-base text-muted-foreground">
               {list.operatorId}
             </span>
-            <span className="w-full truncate font-mono text-xl font-black text-warning">
+            <span className="w-full truncate font-mono text-2xl font-black text-warning">
               {list.listId}
             </span>
           </div>
@@ -94,7 +94,7 @@ function ListTracker() {
   const readySlots = placeSlots(slotsRef.current, ready, byId);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background p-3 sm:p-5">
+    <main className="relative flex h-screen flex-col overflow-hidden bg-background p-2 sm:p-3">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:64px_64px]"
@@ -106,17 +106,17 @@ function ListTracker() {
       <h1 className="sr-only">Warehouse task monitoring dashboard</h1>
 
       {/* outer bordered container, as in the sketch */}
-      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-3 rounded-2xl border-2 border-border/60 bg-card/40 p-3 backdrop-blur sm:gap-4 sm:p-4">
+      <div className="relative mx-auto flex min-h-0 w-full flex-1 flex-col gap-2 rounded-2xl border-2 border-border/60 bg-card/40 p-2 backdrop-blur sm:gap-3 sm:p-3">
         {/* 2×2 grid of ready cards (A–D) */}
-        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+        <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-2 gap-2 sm:gap-3">
           {readySlots.map((list, i) =>
             list ? (
-              <SketchCard key={list.id} list={list} />
+              <SketchCard key={list.id} list={list} className="h-full" />
             ) : (
               <div
                 key={i}
                 className={cn(
-                  "min-h-[6rem] rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
+                  "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
                 )}
               />
             )

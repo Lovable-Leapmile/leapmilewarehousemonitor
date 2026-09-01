@@ -19,8 +19,8 @@ function reachedStations(sides: Record<Side, boolean[]>) {
  * Deliberately low-contrast between neighbours — sizes, weights, opacity and
  * baseline nudges vary subtly so the values need a closer look.
  */
-const SIZES = ["size-12", "size-[3.1rem]", "size-13", "size-[2.9rem]"];
-const TEXTS = ["text-[1.15rem]", "text-[1.2rem]", "text-[1.1rem]", "text-[1.18rem]"];
+const SIZES = ["size-20", "size-[5.4rem]", "size-[5.1rem]", "size-[4.9rem]"];
+const TEXTS = ["text-[2rem]", "text-[2.15rem]", "text-[1.95rem]", "text-[2.05rem]"];
 const WEIGHTS = ["font-medium", "font-semibold", "font-normal", "font-medium"];
 const FADES = ["opacity-90", "opacity-75", "opacity-100", "opacity-80"];
 const NUDGES = ["translate-y-0", "translate-y-[1px]", "-translate-y-[1px]", "translate-y-0"];
@@ -42,7 +42,7 @@ export function SketchStations({
       : "border-success/70 bg-success/10 text-success";
 
   return (
-    <ul className={cn("flex flex-wrap content-start items-center gap-x-2 gap-y-2", className)}>
+    <ul className={cn("flex flex-wrap content-center items-center gap-x-3 gap-y-2", className)}>
       {stations.map((n, i) => (
         <li
           key={n}
