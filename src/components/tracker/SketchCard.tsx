@@ -46,8 +46,9 @@ export function SketchCard({ list, className }: { list: TrackerList; className?:
               : "border-warning bg-warning/20 text-warning"
           )}
         >
-          <span className="-rotate-45 font-sans text-2xl font-black uppercase italic tracking-tight">
-          {list.listLetter}
+          <span className="-rotate-45 font-sans text-2xl font-black italic uppercase tracking-tight">
+            {list.listLetter}
+          </span>
         </span>
       </div>
 
