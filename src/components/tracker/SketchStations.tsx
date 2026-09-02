@@ -15,16 +15,11 @@ function reachedStations(sides: Record<Side, boolean[]>) {
 }
 
 /**
- * Hand-drawn style station markers: a wrapping run of circled numbers.
- * Deliberately low-contrast between neighbours — sizes, weights, opacity and
- * baseline nudges vary subtly so the values need a closer look.
+ * Station markers: a wrapping run of circled numbers, all rendered with a
+ * single consistent size, weight and contrast for clear readability.
  */
-const SIZES = ["size-20", "size-[5.4rem]", "size-[5.1rem]", "size-[4.9rem]"];
-const TEXTS = ["text-[2rem]", "text-[2.15rem]", "text-[1.95rem]", "text-[2.05rem]"];
-const WEIGHTS = ["font-medium", "font-semibold", "font-normal", "font-medium"];
-const FADES = ["opacity-90", "opacity-75", "opacity-100", "opacity-80"];
-const NUDGES = ["translate-y-0", "translate-y-[1px]", "-translate-y-[1px]", "translate-y-0"];
-const BORDERS = ["border", "border-[1.5px]", "border", "border-[1.25px]"];
+const CIRCLE_SIZE = "size-20";
+const CIRCLE_TEXT = "text-[2.05rem]";
 
 export function SketchStations({
   sides,
@@ -43,18 +38,14 @@ export function SketchStations({
 
   return (
     <ul className={cn("flex flex-wrap content-center items-center gap-x-3 gap-y-2", className)}>
-      {stations.map((n, i) => (
+      {stations.map((n) => (
         <li
           key={n}
           className={cn(
-            "grid shrink-0 place-items-center rounded-full font-mono tabular-nums",
+            "grid shrink-0 place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
             circle,
-            SIZES[i % SIZES.length],
-            TEXTS[i % TEXTS.length],
-            WEIGHTS[i % WEIGHTS.length],
-            FADES[i % FADES.length],
-            NUDGES[i % NUDGES.length],
-            BORDERS[i % BORDERS.length]
+            CIRCLE_SIZE,
+            CIRCLE_TEXT
           )}
         >
           {n}
