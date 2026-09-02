@@ -34,10 +34,10 @@ export function SketchCard({
       />
 
       <div className="relative ml-1 flex w-[11rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 px-3 text-center leading-none sm:w-[15.5rem]">
-        {/* letter badge sits at the top of the vertical rule */}
+        {/* letter badge sits centered on the vertical rule */}
         <LetterBadge
           letter={letter ?? list.listLetter}
-          className="absolute -right-[1.65rem] top-0 size-[3.25rem]"
+          className="absolute -right-[1.65rem] top-1/2 -translate-y-1/2 size-[3.25rem]"
           textClassName="text-3xl"
         />
 
