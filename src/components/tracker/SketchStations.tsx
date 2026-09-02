@@ -39,18 +39,14 @@ export function SketchStations({
 
   return (
     <ul className={cn("flex flex-wrap content-center items-center gap-x-3 gap-y-2", className)}>
-      {stations.map((n, i) => (
+      {stations.map((n) => (
         <li
           key={n}
           className={cn(
-            "grid shrink-0 place-items-center rounded-full font-mono tabular-nums",
+            "grid shrink-0 place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
             circle,
-            SIZES[i % SIZES.length],
-            TEXTS[i % TEXTS.length],
-            WEIGHTS[i % WEIGHTS.length],
-            FADES[i % FADES.length],
-            NUDGES[i % NUDGES.length],
-            BORDERS[i % BORDERS.length]
+            CIRCLE_SIZE,
+            CIRCLE_TEXT
           )}
         >
           {n}
