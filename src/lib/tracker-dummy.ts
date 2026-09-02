@@ -20,7 +20,7 @@ type Seed = {
 
 const SEEDS: Seed[] = [
   // 10 Ready
-  { listId: "301780892", operatorId: "Ca.4513943", kind: "pick", status: "ready", station: "S-04", reached: 6, total: 6, a: [4, 9, 17], b: [2, 12, 21] },
+  { listId: "301780892", operatorId: "Ca.4513943", kind: "pick", status: "ready", station: "S-04", reached: 6, total: 6, a: [1, 4, 6, 9, 12, 14, 17, 20, 23], b: [2, 5, 7, 10, 12, 15, 18, 21, 24] },
   { listId: "301781177", operatorId: "Ca.4513880", kind: "put", status: "ready", station: "S-19", reached: 4, total: 4, a: [19, 23], b: [8, 15] },
   { listId: "301781203", operatorId: "Ca.4514271", kind: "pick", status: "ready", station: "S-02", reached: 7, total: 7, a: [2, 6, 13, 20], b: [5, 18, 24] },
   { listId: "301781512", operatorId: "Ca.4513861", kind: "put", status: "ready", station: "S-09", reached: 5, total: 5, a: [9, 15], b: [1, 11, 20] },
