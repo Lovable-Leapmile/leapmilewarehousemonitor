@@ -96,11 +96,17 @@ function computeDeadline(
   return base + budgetMin * 60_000;
 }
 
+/** Real lists carry a numeric list id in comment[0] (ad-hoc/manual rows do not). */
+function isListRecord(r: OrderRecord): boolean {
+  const id = r.comment?.[0] ?? "";
+  return /^\d{6,}$/.test(id);
+}
+
 export function buildLists(records: OrderRecord[]): TrackerList[] {
-  const active = records.filter((r) => r.status === "active");
+  const relevant = records.filter(isListRecord);
   const groups = new Map<string, OrderRecord[]>();
 
-  for (const r of active) {
+  for (const r of relevant) {
     const key = r.comment?.[0] ?? String(r.user_id ?? "0");
     const bucket = groups.get(key);
     if (bucket) bucket.push(r);
