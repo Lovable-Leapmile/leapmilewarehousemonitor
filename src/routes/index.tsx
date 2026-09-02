@@ -32,7 +32,7 @@ export const Route = createFileRoute("/")({
   component: ListTracker,
 });
 
-const READY_SLOTS = 6;
+const READY_SLOTS = 5;
 
 function placeSlots(
   slots: (string | null)[],
@@ -97,7 +97,7 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
 }
 
 
-const READY_LETTERS = "GHIJKL".split("");
+const READY_LETTERS = "GHIJK".split("");
 
 function ListTracker() {
   const initialData = Route.useLoaderData();
@@ -137,13 +137,14 @@ function ListTracker() {
                 key={list.id}
                 list={list}
                 letter={READY_LETTERS[i] ?? list.listLetter}
-                className="h-full"
+                className={cn("h-full", i === 0 && "col-span-2")}
               />
             ) : (
               <div
                 key={i}
                 className={cn(
-                  "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20"
+                  "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20",
+                  i === 0 && "col-span-2"
                 )}
               />
             )
