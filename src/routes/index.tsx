@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { trackerListsQuery } from "@/lib/tracker.queries";
 import { SketchCard } from "@/components/tracker/SketchCard";
 import { LetterBadge } from "@/components/tracker/LetterBadge";
-import { DUMMY_LISTS } from "@/lib/tracker-dummy";
 import { cn } from "@/lib/utils";
 import type { TrackerList } from "@/lib/tracker-types";
 
@@ -104,7 +103,7 @@ function ListTracker() {
   const { data } = useQuery({ ...trackerListsQuery, initialData });
 
   const live = data?.lists ?? [];
-  const incoming = [...live, ...DUMMY_LISTS];
+  const incoming = live;
   const byId = new Map(incoming.map((l) => [l.id, l]));
 
   const ready = incoming.filter((l) => l.status === "ready");
