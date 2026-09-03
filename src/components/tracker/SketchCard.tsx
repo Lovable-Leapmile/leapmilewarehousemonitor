@@ -33,7 +33,7 @@ export function SketchCard({
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[11rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 px-3 text-center leading-none sm:w-[15.5rem]">
+      <div className="relative ml-1 flex w-[11rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 pl-1 pr-6 text-center leading-none sm:w-[15.5rem] sm:pr-8">
         {/* letter badge sits centered on the vertical rule */}
         <LetterBadge
           letter={letter ?? list.listLetter}
