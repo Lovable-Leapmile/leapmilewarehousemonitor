@@ -70,7 +70,7 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
         return (
           <div
             key={`pigeon-${i}`}
-            className="relative flex min-w-0 items-center justify-center gap-3.5 rounded-lg border border-success/25 px-3 py-2.5 sm:gap-4 sm:px-4 sm:py-3 [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
+            className="relative flex min-w-0 items-center justify-center gap-5 rounded-lg border border-success/25 px-3 py-2.5 sm:gap-7 sm:px-4 sm:py-3 [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
           >
             <span
               aria-hidden
