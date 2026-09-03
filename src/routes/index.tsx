@@ -78,14 +78,15 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
             />
             <LetterBadge
               letter={PIGEON_LETTERS[i] ?? "A"}
-              className="size-9 shrink-0 sm:size-10"
-              textClassName="text-xl sm:text-2xl"
+              className="size-11 shrink-0 sm:size-12"
+              textClassName="text-2xl sm:text-3xl"
             />
             <span className="flex min-w-0 flex-col items-center justify-center leading-none">
-              <span className="w-full truncate text-center font-mono text-[0.7rem] tracking-[0.12em] text-foreground/70">
+              <span className="w-full truncate text-center font-mono text-[0.85rem] tracking-[0.12em] text-foreground/70">
                 {head}
               </span>
-              <span className="mt-1 w-full truncate text-center font-mono text-3xl font-black tracking-tight text-success">
+              <span className="mt-1 w-full truncate text-center font-mono text-4xl font-black tracking-tight text-success">
+
                 {tail}
               </span>
             </span>
