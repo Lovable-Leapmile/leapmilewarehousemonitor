@@ -13,13 +13,17 @@ export function LetterBadge({
   return (
     <span
       className={cn(
-        "grid rotate-45 place-items-center rounded-md border-2 border-[#0d0d0d]/80 bg-[#C9CDD2] text-[#0a0a0a] shadow-lg",
+        "relative inline-grid aspect-square shrink-0 place-items-center leading-none",
         className
       )}
     >
       <span
+        aria-hidden
+        className="absolute inset-0 rotate-45 rounded-md border-2 border-[#0d0d0d]/80 bg-[#C9CDD2] shadow-lg"
+      />
+      <span
         className={cn(
-          "-rotate-45 font-sans font-black uppercase tracking-tight",
+          "relative font-sans font-black uppercase leading-none tracking-tight text-[#0a0a0a]",
           textClassName
         )}
       >
