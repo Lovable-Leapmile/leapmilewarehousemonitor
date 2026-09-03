@@ -52,10 +52,6 @@ export function SketchCard({
         >
           {tail}
         </span>
-        <div className="my-3 h-px w-full bg-foreground/20" />
-        <span className="w-full whitespace-nowrap font-mono text-2xl tracking-[0.08em] text-foreground/90 sm:text-[2rem]">
-          {list.operatorId}
-        </span>
       </div>
 
       <SketchStations
