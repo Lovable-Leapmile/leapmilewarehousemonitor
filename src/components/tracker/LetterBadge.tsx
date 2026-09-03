@@ -13,7 +13,7 @@ export function LetterBadge({
   return (
     <span
       className={cn(
-        "grid rotate-45 place-items-center rounded-md border-2 border-[#1a1a1a] bg-[#FFB000] text-black shadow-lg",
+        "grid rotate-45 place-items-center rounded-md border-2 border-[#0d0d0d]/80 bg-[#E8EAED] text-[#0a0a0a] shadow-lg",
         className
       )}
     >
