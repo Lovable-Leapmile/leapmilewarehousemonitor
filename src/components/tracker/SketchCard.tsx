@@ -23,7 +23,7 @@ export function SketchCard({
   return (
     <article
       className={cn(
-        "relative flex min-h-0 min-w-0 items-stretch gap-3 overflow-hidden rounded-2xl border-2 bg-card/80 p-3 backdrop-blur sm:gap-4 sm:p-4",
+        "relative flex min-h-0 min-w-0 items-stretch gap-1 overflow-hidden rounded-2xl border-2 bg-card/80 py-3 pl-2 pr-2 backdrop-blur sm:gap-2 sm:py-4 sm:pl-2 sm:pr-2",
         ready ? "border-success/55" : "border-warning/50",
         className
       )}
@@ -33,7 +33,7 @@ export function SketchCard({
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[10rem] shrink-0 flex-col items-center justify-center gap-1 border-r border-foreground/20 pl-1 pr-4 text-center leading-none sm:w-[13.5rem] sm:pr-6">
+      <div className="relative ml-1 flex w-[9.5rem] shrink-0 flex-col items-center justify-center gap-1 border-r border-foreground/20 pl-0 pr-2 text-center leading-none sm:w-[12.5rem] sm:pr-3">
         <span className="font-mono text-2xl tracking-[0.12em] text-foreground/85 sm:text-3xl">
           {head}
         </span>
@@ -57,7 +57,7 @@ export function SketchCard({
       <SketchStations
         sides={list.sides}
         tone={ready ? "success" : "warning"}
-        className="min-w-0 flex-1 pl-9 sm:pl-12"
+        className="min-w-0 flex-1 pl-3 pr-1 sm:pl-4 sm:pr-1"
       />
     </article>
   );
