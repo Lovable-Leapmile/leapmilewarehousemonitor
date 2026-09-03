@@ -18,8 +18,8 @@ function reachedStations(sides: Record<Side, boolean[]>) {
  * Station markers: a wrapping run of circled numbers, all rendered with a
  * single consistent size, weight and contrast for clear readability.
  */
-const CIRCLE_SIZE = "size-20";
-const CIRCLE_TEXT = "text-[2.05rem]";
+const CIRCLE_SIZE = "size-[5.5rem]";
+const CIRCLE_TEXT = "text-[2.5rem]";
 
 export function SketchStations({
   sides,
