@@ -56,47 +56,46 @@ function placeSlots(
   return slots.map((id) => (id ? byId.get(id) ?? null : null));
 }
 
-const PIGEON_LETTERS = "ABCDEFGHIJKL".split("");
+const PIGEON_LETTERS = "ABCDEFGHIJKLMNOP".split("");
 
-/** Pigeon-hole row: collected lists waiting for the picker, 8 in one row. */
+/** Pigeon-hole cards: 16 picking slots, badge left + list ID right. */
 function PigeonRow({ lists }: { lists: TrackerList[] }) {
-  const shown = lists.slice(0, 8);
+  const slots = Array.from({ length: 16 }, (_, i) => lists[i % Math.max(lists.length, 1)] ?? null);
 
   return (
-    <section className="shrink-0 rounded-2xl border-2 border-success/30 bg-background/60 p-2 backdrop-blur sm:p-3">
-      <div className="grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
-        {shown.map((list, i) => {
-          const head = list.listId.slice(0, -3);
-          const tail = list.listId.slice(-3);
-          return (
-            <div
-              key={`pigeon-${list.id}`}
-              className="relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-success/25 px-2 py-5 text-center leading-none [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
-            >
-              {/* shelf lip for depth */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-2 rounded-b-lg bg-[linear-gradient(to_bottom,oklch(1_0_0/8%),transparent)]"
-              />
-              <LetterBadge
-                letter={PIGEON_LETTERS[i] ?? "A"}
-                className="mx-auto size-9"
-                textClassName="text-xl"
-              />
-              <span className="mt-2 w-full truncate font-mono text-sm tracking-[0.12em] text-foreground/80">
+    <section className="grid shrink-0 grid-cols-4 gap-2 sm:grid-cols-8 sm:gap-2.5">
+      {slots.map((list, i) => {
+        const head = list ? list.listId.slice(0, -3) : "—";
+        const tail = list ? list.listId.slice(-3) : "";
+        return (
+          <div
+            key={`pigeon-${i}`}
+            className="relative flex min-w-0 items-center gap-2 rounded-lg border border-success/25 px-2 py-2 [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
+          >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-1.5 rounded-b-lg bg-[linear-gradient(to_bottom,oklch(1_0_0/8%),transparent)]"
+            />
+            <LetterBadge
+              letter={PIGEON_LETTERS[i] ?? "A"}
+              className="size-9 shrink-0 sm:size-10"
+              textClassName="text-xl sm:text-2xl"
+            />
+            <span className="flex min-w-0 flex-1 flex-col items-end leading-none">
+              <span className="w-full truncate text-right font-mono text-[0.7rem] tracking-[0.12em] text-foreground/70">
                 {head}
               </span>
-              <span className="w-full truncate font-mono text-4xl font-black tracking-tight text-success">
+              <span className="w-full truncate text-right font-mono text-3xl font-black tracking-tight text-success">
                 {tail}
               </span>
-            </div>
-          );
-        })}
-      </div>
+            </span>
+          </div>
+        );
+      })}
     </section>
   );
-
 }
+
 
 
 const READY_LETTERS = "GHIJK".split("");
