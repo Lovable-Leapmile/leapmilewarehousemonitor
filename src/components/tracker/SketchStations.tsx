@@ -37,7 +37,7 @@ export function SketchStations({
       : "border-success/70 bg-success/10 text-success";
 
   return (
-    <ul className={cn("flex flex-wrap content-center items-center gap-x-3 gap-y-2", className)}>
+    <ul className={cn("flex flex-wrap content-center items-center gap-x-1.5 gap-y-1.5", className)}>
       {stations.map((n) => (
         <li
           key={n}
