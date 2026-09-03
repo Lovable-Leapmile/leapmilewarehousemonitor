@@ -89,10 +89,6 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
               <span className="w-full truncate font-mono text-4xl font-black tracking-tight text-success">
                 {tail}
               </span>
-              <div className="my-1 h-px w-2/3 bg-foreground/20" />
-              <span className="w-full truncate font-mono text-lg tracking-[0.06em] text-foreground/90">
-                {list.operatorId}
-              </span>
             </div>
           );
         })}
