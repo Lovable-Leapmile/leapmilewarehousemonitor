@@ -33,25 +33,25 @@ export function SketchCard({
         className={cn("absolute inset-y-0 left-0 w-1", ready ? "bg-success" : "bg-warning")}
       />
 
-      <div className="relative ml-1 flex w-[11rem] shrink-0 flex-col items-center justify-center border-r border-foreground/20 pl-1 pr-6 text-center leading-none sm:w-[15.5rem] sm:pr-8">
-        {/* letter badge sits centered on the vertical rule */}
-        <LetterBadge
-          letter={letter ?? list.listLetter}
-          className="absolute -right-[1.65rem] top-1/2 -translate-y-1/2 size-[3.25rem]"
-          textClassName="text-3xl"
-        />
-
-        <span className="font-mono text-xl tracking-[0.12em] text-foreground/85 sm:text-2xl">
+      <div className="relative ml-1 flex w-[10rem] shrink-0 flex-col items-center justify-center gap-1 border-r border-foreground/20 pl-1 pr-4 text-center leading-none sm:w-[13.5rem] sm:pr-6">
+        <span className="font-mono text-2xl tracking-[0.12em] text-foreground/85 sm:text-3xl">
           {head}
         </span>
         <span
           className={cn(
-            "font-mono text-7xl font-black tracking-tight sm:text-8xl",
+            "font-mono text-8xl font-black tracking-tight sm:text-[6.5rem]",
             ready ? "text-success" : "text-foreground"
           )}
         >
           {tail}
         </span>
+
+        {/* letter badge sits below the list ID */}
+        <LetterBadge
+          letter={letter ?? list.listLetter}
+          className="mt-3 size-[3.75rem]"
+          textClassName="text-4xl"
+        />
       </div>
 
       <SketchStations
