@@ -63,46 +63,42 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
   const shown = lists.slice(0, 8);
 
   return (
-    <section className="shrink-0 rounded-2xl border-2 border-success/25 bg-background/70 p-3 backdrop-blur [box-shadow:inset_0_2px_10px_-4px_oklch(0_0_0/80%)] sm:p-4">
-      <div className="grid grid-cols-4 gap-3 sm:gap-4 md:grid-cols-8">
+    <section className="shrink-0 rounded-2xl border-2 border-success/30 bg-background/60 p-2 backdrop-blur sm:p-3">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
         {shown.map((list, i) => {
           const head = list.listId.slice(0, -3);
           const tail = list.listId.slice(-3);
           return (
-            /* outer frame = pigeon-hole wall, inner = recessed compartment */
             <div
               key={`pigeon-${list.id}`}
-              className="rounded-xl border border-foreground/15 p-[3px] [background:linear-gradient(180deg,oklch(1_0_0/10%),transparent_45%,oklch(0_0_0/45%))] [box-shadow:0_1px_0_0_oklch(1_0_0/12%),0_14px_26px_-16px_oklch(0_0_0/90%)]"
+              className="relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-success/25 px-2 py-5 text-center leading-none [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
             >
-              <div className="relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-success/20 px-2 py-5 text-center leading-none [background:linear-gradient(165deg,color-mix(in_oklab,var(--card)_90%,var(--success)_6%),color-mix(in_oklab,var(--background)_82%,black))] [box-shadow:inset_8px_8px_14px_-8px_oklch(0_0_0/85%),inset_-6px_-6px_12px_-8px_oklch(1_0_0/10%),inset_0_-2px_0_0_color-mix(in_oklab,var(--success)_28%,transparent)]">
-                {/* shelf lip for depth */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 bottom-0 h-2.5 rounded-b-lg bg-[linear-gradient(to_bottom,oklch(1_0_0/10%),transparent)]"
-                />
-                <LetterBadge
-                  letter={PIGEON_LETTERS[i] ?? "A"}
-                  className="mx-auto size-9"
-                  textClassName="text-xl"
-                />
-                <span className="mt-2 w-full truncate font-mono text-sm tracking-[0.12em] text-foreground/80">
-                  {head}
-                </span>
-                <span className="w-full truncate font-mono text-4xl font-black tracking-tight text-success">
-                  {tail}
-                </span>
-                <div className="my-1 h-px w-2/3 bg-foreground/20" />
-                <span className="w-full truncate font-mono text-lg tracking-[0.06em] text-foreground/90">
-                  {list.operatorId}
-                </span>
-              </div>
+              {/* shelf lip for depth */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-2 rounded-b-lg bg-[linear-gradient(to_bottom,oklch(1_0_0/8%),transparent)]"
+              />
+              <LetterBadge
+                letter={PIGEON_LETTERS[i] ?? "A"}
+                className="mx-auto size-9"
+                textClassName="text-xl"
+              />
+              <span className="mt-2 w-full truncate font-mono text-sm tracking-[0.12em] text-foreground/80">
+                {head}
+              </span>
+              <span className="w-full truncate font-mono text-4xl font-black tracking-tight text-success">
+                {tail}
+              </span>
+              <div className="my-1 h-px w-2/3 bg-foreground/20" />
+              <span className="w-full truncate font-mono text-lg tracking-[0.06em] text-foreground/90">
+                {list.operatorId}
+              </span>
             </div>
           );
         })}
       </div>
     </section>
   );
-
 
 }
 
