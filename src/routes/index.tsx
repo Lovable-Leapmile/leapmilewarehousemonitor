@@ -63,16 +63,21 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
   const shown = lists.slice(0, 8);
 
   return (
-    <section className="shrink-0 overflow-hidden rounded-2xl border-2 border-success/40 bg-card/60 backdrop-blur">
-      <div className="grid grid-cols-4 divide-y divide-foreground/15 md:grid-cols-8 md:divide-y-0">
+    <section className="shrink-0 rounded-2xl border-2 border-success/30 bg-background/60 p-2 backdrop-blur sm:p-3">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
         {shown.map((list, i) => {
           const head = list.listId.slice(0, -3);
           const tail = list.listId.slice(-3);
           return (
             <div
               key={`pigeon-${list.id}`}
-              className="relative flex min-w-0 flex-col items-center justify-center gap-1 border-r border-foreground/15 px-2 py-5 text-center leading-none last:border-r-0"
+              className="relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg border border-success/25 px-2 py-5 text-center leading-none [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
             >
+              {/* shelf lip for depth */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-2 rounded-b-lg bg-[linear-gradient(to_bottom,oklch(1_0_0/8%),transparent)]"
+              />
               <LetterBadge
                 letter={PIGEON_LETTERS[i] ?? "A"}
                 className="mx-auto size-9"
@@ -94,6 +99,7 @@ function PigeonRow({ lists }: { lists: TrackerList[] }) {
       </div>
     </section>
   );
+
 }
 
 
