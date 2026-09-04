@@ -110,7 +110,13 @@ function ListTracker() {
   const incoming = [...live, ...DUMMY_LISTS];
   const byId = new Map(incoming.map((l) => [l.id, l]));
 
-  const ready = incoming.filter((l) => l.status === "ready");
+  // The first slot is the full-width card, so the list with the most reached
+  // stations is placed first.
+  const dotCount = (l: TrackerList) =>
+    l.sides.A.filter(Boolean).length + l.sides.B.filter(Boolean).length;
+  const ready = incoming
+    .filter((l) => l.status === "ready")
+    .sort((a, b) => dotCount(b) - dotCount(a));
   const pending = incoming.filter((l) => l.status === "inprogress");
 
   // Fixed slots in the ready view: a card keeps its slot for its lifetime;
