@@ -44,8 +44,8 @@ export function SketchStations({
 
   const chip =
     tone === "warning"
-      ? "border-warning/40 bg-warning/15 text-warning"
-      : "border-success/40 bg-success/15 text-success";
+      ? "border-warning bg-warning text-background"
+      : "border-success bg-success text-background";
 
   return (
     <ul className={cn("flex flex-wrap content-center items-start gap-x-1 gap-y-2", className)}>
