@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Rotated diamond badge carrying the assigned list letter. */
+/** Square badge carrying the assigned list letter. */
 export function LetterBadge({
   letter,
   className,
@@ -19,7 +19,7 @@ export function LetterBadge({
     >
       <span
         aria-hidden
-        className="absolute inset-0 rotate-45 rounded-md border-2 border-[#0d0d0d]/80 bg-[#C9CDD2] shadow-lg"
+        className="absolute inset-0 rounded-md border-2 border-[#0d0d0d]/80 bg-[#C9CDD2] shadow-lg"
       />
       <span
         className={cn(
