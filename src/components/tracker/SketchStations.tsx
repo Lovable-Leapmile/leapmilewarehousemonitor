@@ -48,9 +48,9 @@ export function SketchStations({
       : "border-success/40 bg-success/15 text-success";
 
   return (
-    <ul className={cn("flex flex-wrap content-center items-start gap-x-1.5 gap-y-1", className)}>
+    <ul className={cn("flex flex-wrap content-center items-start gap-x-1 gap-y-2", className)}>
       {stations.map((n) => (
-        <li key={n} className="flex shrink-0 flex-col items-center gap-0.5">
+        <li key={n} className="flex shrink-0 flex-col items-center">
           <span
             className={cn(
               "grid place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
@@ -61,9 +61,11 @@ export function SketchStations({
           >
             {n}
           </span>
+          {/* Shelf ID chip overlaps the circle it belongs to, so the pairing
+              is unambiguous even when rows sit close together. */}
           <span
             className={cn(
-              "rounded-md border px-1 py-[0.05rem] font-mono text-[0.95rem] font-semibold leading-tight tracking-tight tabular-nums",
+              "-mt-3 rounded-md border-2 bg-background px-1.5 py-[0.05rem] font-mono text-[0.95rem] font-semibold leading-tight tracking-tight tabular-nums shadow-sm",
               chip
             )}
           >
