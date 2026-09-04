@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Rotated diamond badge carrying the assigned list letter. */
+/** Square badge carrying the assigned list letter. */
 export function LetterBadge({
   letter,
   className,
