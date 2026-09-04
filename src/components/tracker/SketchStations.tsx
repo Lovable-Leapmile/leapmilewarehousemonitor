@@ -21,6 +21,12 @@ function reachedStations(sides: Record<Side, boolean[]>) {
 const CIRCLE_SIZE = "size-[5.5rem]";
 const CIRCLE_TEXT = "text-[2.5rem]";
 
+/** Last 4 digits of the shelf ID for a station, formatted "00-12". */
+function shelfLabel(station: number) {
+  const raw = String(station).padStart(4, "0");
+  return `${raw.slice(0, 2)}-${raw.slice(2)}`;
+}
+
 export function SketchStations({
   sides,
   tone = "success",
@@ -36,19 +42,33 @@ export function SketchStations({
       ? "border-warning/70 bg-warning/10 text-warning"
       : "border-success/70 bg-success/10 text-success";
 
+  const chip =
+    tone === "warning"
+      ? "border-warning/40 bg-warning/15 text-warning"
+      : "border-success/40 bg-success/15 text-success";
+
   return (
-    <ul className={cn("flex flex-wrap content-center items-center gap-x-1.5 gap-y-1.5", className)}>
+    <ul className={cn("flex flex-wrap content-center items-start gap-x-1.5 gap-y-1", className)}>
       {stations.map((n) => (
-        <li
-          key={n}
-          className={cn(
-            "grid shrink-0 place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
-            circle,
-            CIRCLE_SIZE,
-            CIRCLE_TEXT
-          )}
-        >
-          {n}
+        <li key={n} className="flex shrink-0 flex-col items-center gap-0.5">
+          <span
+            className={cn(
+              "grid place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
+              circle,
+              CIRCLE_SIZE,
+              CIRCLE_TEXT
+            )}
+          >
+            {n}
+          </span>
+          <span
+            className={cn(
+              "rounded-md border px-1 py-[0.05rem] font-mono text-[0.95rem] font-semibold leading-tight tracking-tight tabular-nums",
+              chip
+            )}
+          >
+            {shelfLabel(n)}
+          </span>
         </li>
       ))}
     </ul>
