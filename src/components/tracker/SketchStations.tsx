@@ -21,9 +21,14 @@ function reachedStations(sides: Record<Side, boolean[]>) {
 const CIRCLE_SIZE = "size-[5.5rem]";
 const CIRCLE_TEXT = "text-[2.5rem]";
 
-/** Last 4 digits of the shelf ID for a station, formatted "00-12". */
+/**
+ * Last 4 digits of the shelf ID, formatted "00-12". Shelf IDs are unrelated to
+ * the station number, so the value is scrambled deterministically (stable per
+ * station, never simply mirroring the dot number).
+ */
 function shelfLabel(station: number) {
-  const raw = String(station).padStart(4, "0");
+  const h = (station * 2654435761) % 9973;
+  const raw = String(h % 10000).padStart(4, "0");
   return `${raw.slice(0, 2)}-${raw.slice(2)}`;
 }
 
