@@ -44,8 +44,8 @@ export function SketchStations({
 
   const chip =
     tone === "warning"
-      ? "border-warning/40 bg-warning/15 text-warning"
-      : "border-success/40 bg-success/15 text-success";
+      ? "border-warning bg-warning text-background"
+      : "border-success bg-success text-background";
 
   return (
     <ul className={cn("flex flex-wrap content-center items-start gap-x-1 gap-y-2", className)}>
@@ -65,7 +65,7 @@ export function SketchStations({
               is unambiguous even when rows sit close together. */}
           <span
             className={cn(
-              "-mt-3 rounded-md border-2 bg-background px-1.5 py-[0.05rem] font-mono text-[0.95rem] font-semibold leading-tight tracking-tight tabular-nums shadow-sm",
+              "-mt-3 rounded-md border-2 px-1.5 py-[0.05rem] font-mono text-[0.95rem] font-bold leading-tight tracking-tight tabular-nums shadow-sm",
               chip
             )}
           >
