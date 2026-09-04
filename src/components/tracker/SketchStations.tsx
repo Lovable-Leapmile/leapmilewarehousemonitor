@@ -65,7 +65,7 @@ export function SketchStations({
               is unambiguous even when rows sit close together. */}
           <span
             className={cn(
-              "-mt-3 rounded-md border-2 bg-background px-1.5 py-[0.05rem] font-mono text-[0.95rem] font-semibold leading-tight tracking-tight tabular-nums shadow-sm",
+              "-mt-3 rounded-md border-2 px-1.5 py-[0.05rem] font-mono text-[0.95rem] font-bold leading-tight tracking-tight tabular-nums shadow-sm",
               chip
             )}
           >
