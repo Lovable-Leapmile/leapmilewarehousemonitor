@@ -57,18 +57,36 @@ function placeSlots(
 
 const PIGEON_LETTERS = "ABCDEFGHIJKLMNOP".split("");
 
-/** Pigeon-hole cards: 16 picking slots, badge left + list ID right. */
-function PigeonRow({ holes }: { holes: PigeonHole[] }) {
+/**
+ * Pigeon-hole cards: 16 picking slots, badge left + list ID right.
+ * Empty holes are grey/white, holes with ready-to-pick data turn green, and
+ * holes whose letter is also on the pick list above turn yellow.
+ */
+function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: Set<string> }) {
   const byLetter = new Map(holes.map((h) => [h.letter, h]));
 
   return (
     <section className="grid shrink-0 grid-cols-4 gap-2 sm:grid-cols-8 sm:gap-2.5">
       {PIGEON_LETTERS.map((letter) => {
         const ids = byLetter.get(letter)?.listIds ?? [];
+        const filled = ids.length > 0;
+        const picked = pickLetters.has(letter);
+        const accent = picked ? "var(--warning)" : filled ? "var(--success)" : "var(--muted)";
         return (
           <div
             key={`pigeon-${letter}`}
-            className="relative flex min-w-0 items-center justify-center gap-5 rounded-lg border border-success/25 px-3 py-2.5 sm:gap-7 sm:px-4 sm:py-3 [background:linear-gradient(160deg,color-mix(in_oklab,var(--card)_92%,var(--success)_8%),color-mix(in_oklab,var(--background)_88%,black))] [box-shadow:inset_6px_6px_10px_-6px_oklch(0_0_0/70%),inset_-4px_-4px_8px_-6px_oklch(1_0_0/12%),0_2px_0_0_color-mix(in_oklab,var(--success)_25%,transparent),0_10px_22px_-14px_oklch(0_0_0/85%)]"
+            className={cn(
+              "relative flex min-w-0 items-center justify-center gap-5 rounded-lg border px-3 py-2.5 sm:gap-7 sm:px-4 sm:py-3",
+              picked
+                ? "border-warning/70"
+                : filled
+                  ? "border-success/45"
+                  : "border-foreground/15"
+            )}
+            style={{
+              background: `linear-gradient(160deg,color-mix(in oklab,var(--card) 90%,${accent} 10%),color-mix(in oklab,var(--background) 88%,black))`,
+              boxShadow: `inset 6px 6px 10px -6px oklch(0 0 0/70%),inset -4px -4px 8px -6px oklch(1 0 0/12%),0 2px 0 0 color-mix(in oklab,${accent} 35%,transparent),0 10px 22px -14px oklch(0 0 0/85%)`,
+            }}
           >
             <span
               aria-hidden
@@ -80,7 +98,7 @@ function PigeonRow({ holes }: { holes: PigeonHole[] }) {
               textClassName="text-2xl sm:text-3xl"
             />
             <span className="flex min-w-0 flex-col items-center justify-center gap-1 leading-none">
-              {ids.length === 0 ? (
+              {!filled ? (
                 <span className="font-mono text-2xl font-black tracking-tight text-foreground/35">
                   —
                 </span>
@@ -90,7 +108,12 @@ function PigeonRow({ holes }: { holes: PigeonHole[] }) {
                     <span className="w-full truncate text-center font-mono text-[0.85rem] tracking-[0.12em] text-foreground/70">
                       {id.slice(0, -3)}
                     </span>
-                    <span className="mt-1 w-full truncate text-center font-mono text-4xl font-black tracking-tight text-success">
+                    <span
+                      className={cn(
+                        "mt-1 w-full truncate text-center font-mono text-4xl font-black tracking-tight",
+                        picked ? "text-warning" : "text-success"
+                      )}
+                    >
                       {id.slice(-3)}
                     </span>
                   </span>
