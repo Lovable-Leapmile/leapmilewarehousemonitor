@@ -2,12 +2,21 @@ import { STATIONS_PER_SIDE, type Side, type TrackerList } from "./tracker-types"
 
 export type { Side, TrackerList };
 
-
 const API_BASE = "https://testpod.leapmile.com/nanostore/orders";
 const FALLBACK_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
 
-type OrderRecord = {
+type OrderMetadata = {
+  qty?: number | null;
+  badge?: string | null;
+  item_id?: string | null;
+  list_id?: string | null;
+  list_status?: string | null;
+  operator_id?: string | null;
+};
+
+export type OrderRecord = {
+  metadata?: OrderMetadata | null;
   comment?: string[] | null;
   id: number;
   status: string | null;
@@ -21,16 +30,10 @@ type OrderRecord = {
   auto_complete_time: number | null;
 };
 
-const REACHED_STATUSES = new Set(["tray_ready_to_use", "completed", "at_station"]);
-
-/** Assigned list letter pool — deterministic per list so it never shuffles. */
-const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-
-export async function fetchOrders(): Promise<OrderRecord[]> {
+async function getOrders(query: string): Promise<OrderRecord[]> {
   try {
     const token = process.env["LEAPMILE_API_TOKEN"] ?? FALLBACK_TOKEN;
-    const res = await fetch(`${API_BASE}?order_by_field=created_at&order_by_type=DESC`, {
+    const res = await fetch(`${API_BASE}?${query}`, {
       headers: { accept: "application/json", Authorization: `Bearer ${token}` },
     });
     if (!res.ok) return [];
@@ -41,10 +44,21 @@ export async function fetchOrders(): Promise<OrderRecord[]> {
   }
 }
 
-/**
- * `station_friendly_name` (e.g. "S-03") is the station on side A.
- * Falls back to `station_id` (`S-1-<bank>-<number>-1`, bank 1 -> side B).
- */
+/** Trays still travelling — their lists are IN PROGRESS. */
+export function fetchInProgressOrders() {
+  return getOrders(
+    "tray_status=inprogress&status=active&order_by_field=created_at&order_by_type=ASC"
+  );
+}
+
+/** Trays that arrived at a station (e.g. "S-01") — READY candidates. */
+export function fetchReadyOrders() {
+  return getOrders(
+    "tray_status=tray_ready_to_use&status=active&order_by_field=updated_at&order_by_type=ASC"
+  );
+}
+
+/** "S-01" / "S-1-1-2-1" -> { side, station } */
 function locate(order: OrderRecord): { side: Side; station: number } | null {
   const m = /(\d{1,2})/.exec(order.station_friendly_name ?? "");
   if (m) {
@@ -64,7 +78,6 @@ function locate(order: OrderRecord): { side: Side; station: number } | null {
   return null;
 }
 
-
 function emptySides(): Record<Side, boolean[]> {
   return {
     A: Array.from({ length: STATIONS_PER_SIDE }, () => false),
@@ -77,70 +90,81 @@ function slotIndex(station: number) {
   return STATIONS_PER_SIDE - station;
 }
 
-/**
- * Absolute deadline (epoch ms) for a ready list: the moment the last shelf
- * arrived (latest `updated_at` among its orders) plus the auto-complete
- * budget in minutes. The client ticks this down live. When the feed has no
- * usable timestamp, the budget is counted from now so the timer still runs.
- */
-function computeDeadline(
-  orders: OrderRecord[],
-  budgetMin: number
-): number {
-  let baseMs = 0;
-  for (const o of orders) {
-    const t = Date.parse(o.updated_at ?? "");
-    if (Number.isFinite(t) && t > baseMs) baseMs = t;
-  }
-  const base = baseMs > 0 ? baseMs : Date.now();
-  return base + budgetMin * 60_000;
+/** Last 4 characters of the tray/shelf id, shown as "00-12". */
+function shelfLabel(trayId: string | null): string {
+  const raw = (trayId ?? "").replace(/[^A-Za-z0-9]/g, "").slice(-4).padStart(4, "0");
+  return `${raw.slice(0, 2)}-${raw.slice(2)}`;
 }
 
-export function buildLists(records: OrderRecord[]): TrackerList[] {
-  const active = records.filter((r) => r.status === "active");
-  const groups = new Map<string, OrderRecord[]>();
+function listKey(order: OrderRecord) {
+  return (
+    order.metadata?.list_id ?? order.comment?.[0] ?? String(order.user_id ?? order.id)
+  );
+}
 
-  for (const r of active) {
-    const key = r.comment?.[0] ?? String(r.user_id ?? "0");
-    const bucket = groups.get(key);
-    if (bucket) bucket.push(r);
-    else groups.set(key, [r]);
-  }
+/**
+ * Groups both feeds by list id. A list is READY only when none of its trays
+ * are still in progress; otherwise it is IN PROGRESS.
+ */
+export function buildLists(
+  inProgress: OrderRecord[],
+  ready: OrderRecord[]
+): TrackerList[] {
+  const groups = new Map<string, { pending: OrderRecord[]; arrived: OrderRecord[] }>();
+
+  const bucket = (key: string) => {
+    let g = groups.get(key);
+    if (!g) {
+      g = { pending: [], arrived: [] };
+      groups.set(key, g);
+    }
+    return g;
+  };
+
+  for (const o of inProgress) bucket(listKey(o)).pending.push(o);
+  for (const o of ready) bucket(listKey(o)).arrived.push(o);
 
   const lists: TrackerList[] = [];
 
-  for (const [key, orders] of groups) {
+  for (const [key, group] of groups) {
+    const all = [...group.arrived, ...group.pending];
+    const first = all[0];
+    if (!first) continue;
+
     const sides = emptySides();
-    let reached = 0;
+    const stops: { station: number; shelf: string }[] = [];
     let station: string | null = null;
 
-    for (const order of orders) {
-      if (!REACHED_STATUSES.has(order.tray_status ?? "")) continue;
+    for (const order of group.arrived) {
       const spot = locate(order);
       if (!spot) continue;
       sides[spot.side][slotIndex(spot.station)] = true;
       station ??= order.station_friendly_name ?? null;
-      reached += 1;
+      stops.push({
+        station: spot.side === "A" ? spot.station : spot.station + STATIONS_PER_SIDE,
+        shelf: shelfLabel(order.tray_id),
+      });
     }
 
-    const total = orders.length;
-    const isReady = total > 0 && reached >= total;
-    const autoComplete = orders.find((o) => o.auto_complete_time != null)?.auto_complete_time;
-    const budgetMin = autoComplete ?? 5;
-    const deadline = isReady ? computeDeadline(orders, budgetMin) : null;
+    const reached = group.arrived.length;
+    const total = all.length;
+    const isReady = group.pending.length === 0 && reached > 0;
 
-    const anchorId = orders.reduce((min, o) => Math.min(min, o.id), Number.MAX_SAFE_INTEGER);
-    const first = orders[0];
-    const listId = first?.comment?.[0] ?? String(anchorId).padStart(9, "0");
-    const operatorId =
-      first?.comment?.[1] ?? `Ca.${String(first?.user_id ?? key).padStart(7, "0")}`;
+    const budgetMin = all.find((o) => o.auto_complete_time != null)?.auto_complete_time ?? 5;
+    let baseMs = 0;
+    for (const o of all) {
+      const t = Date.parse(o.updated_at ?? "");
+      if (Number.isFinite(t) && t > baseMs) baseMs = t;
+    }
+    const deadline = isReady ? (baseMs > 0 ? baseMs : Date.now()) + budgetMin * 60_000 : null;
+
+    const anchorId = all.reduce((min, o) => Math.min(min, o.id), Number.MAX_SAFE_INTEGER);
 
     lists.push({
-      id: `list-${key}-${anchorId}`,
-      listId,
-      listLetter: LETTERS[anchorId % LETTERS.length] ?? "A",
-      operatorId,
-
+      id: `list-${key}`,
+      listId: first.metadata?.list_id ?? first.comment?.[0] ?? String(anchorId).padStart(9, "0"),
+      listLetter: first.metadata?.badge ?? "A",
+      operatorId: first.metadata?.operator_id ?? first.comment?.[1] ?? "",
       kind: anchorId % 2 === 0 ? "pick" : "put",
       status: isReady ? "ready" : "inprogress",
       deadline,
@@ -148,6 +172,7 @@ export function buildLists(records: OrderRecord[]): TrackerList[] {
       reached,
       total,
       sides,
+      stops: stops.sort((a, b) => a.station - b.station),
     });
   }
 
