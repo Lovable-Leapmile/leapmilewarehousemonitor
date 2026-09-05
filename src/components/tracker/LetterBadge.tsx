@@ -6,12 +6,15 @@ export function LetterBadge({
   className,
   textClassName,
   active = true,
+  highlight = false,
 }: {
   letter: string;
   className?: string;
   textClassName?: string;
   /** Active badges show a white face; inactive ones stay shaded grey. */
   active?: boolean;
+  /** Highlighted badges (on the current pick list) show a yellow face. */
+  highlight?: boolean;
 }) {
   return (
     <span
@@ -24,9 +27,10 @@ export function LetterBadge({
         aria-hidden
         className={cn(
           "absolute inset-0 rounded-md border-2 border-[#0d0d0d]/80 shadow-lg",
-          active ? "bg-white" : "bg-[#6E7378]"
+          highlight ? "bg-[#FFB000]" : active ? "bg-white" : "bg-[#6E7378]"
         )}
       />
+
 
       <span
         className={cn(
