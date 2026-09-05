@@ -106,8 +106,7 @@ function ListTracker() {
   const initialData = Route.useLoaderData();
   const { data } = useQuery({ ...trackerListsQuery, initialData });
 
-  const live = data?.lists ?? [];
-  const incoming = [...live, ...DUMMY_LISTS];
+  const incoming = data?.lists ?? [];
   const byId = new Map(incoming.map((l) => [l.id, l]));
 
   // The first slot is the full-width card, so the list with the most reached
@@ -138,32 +137,40 @@ function ListTracker() {
 
       {/* outer bordered container, as in the sketch */}
       <div className="relative mx-auto flex min-h-0 w-full flex-1 flex-col gap-2 rounded-2xl border-2 border-border/60 bg-card/40 p-2 backdrop-blur sm:gap-3 sm:p-3">
-        {/* 2×3 grid of ready cards */}
-        <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-3 gap-2 sm:gap-3">
-          {readySlots.map((list, i) =>
-            list ? (
-              <SketchCard
-                key={list.id}
-                list={list}
-                letter={READY_LETTERS[i] ?? list.listLetter}
-                className={cn("h-full", i === 0 && "col-span-2")}
-              />
-            ) : (
-              <div
-                key={i}
-                className={cn(
-                  "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20",
-                  i === 0 && "col-span-2"
-                )}
-              />
-            )
-          )}
-        </section>
+        {incoming.length === 0 ? (
+          <div className="flex min-h-0 flex-1 items-center justify-center">
+            <p className="font-mono text-3xl font-bold tracking-[0.2em] text-foreground/60 sm:text-5xl">
+              NO LIST AVAILABLE
+            </p>
+          </div>
+        ) : (
+          <>
+            <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-3 gap-2 sm:gap-3">
+              {readySlots.map((list, i) =>
+                list ? (
+                  <SketchCard
+                    key={list.id}
+                    list={list}
+                    letter={list.listLetter || (READY_LETTERS[i] ?? "A")}
+                    className={cn("h-full", i === 0 && "col-span-2")}
+                  />
+                ) : (
+                  <div
+                    key={i}
+                    className={cn(
+                      "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20",
+                      i === 0 && "col-span-2"
+                    )}
+                  />
+                )
+              )}
+            </section>
 
+            <div className="border-t border-foreground/20" />
 
-        <div className="border-t border-foreground/20" />
-
-        <PigeonRow lists={ready.length >= 8 ? ready : [...ready, ...pending]} />
+            <PigeonRow lists={ready.length >= 8 ? ready : [...ready, ...pending]} />
+          </>
+        )}
       </div>
     </main>
   );
