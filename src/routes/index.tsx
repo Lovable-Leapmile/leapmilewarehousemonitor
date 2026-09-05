@@ -83,19 +83,10 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
                   ? "border-success/45"
                   : "border-foreground/10"
             )}
-            style={
-              filled
-                ? {
-                    background: `linear-gradient(160deg,#FFFFFF,color-mix(in oklab,#FFFFFF 88%,${accent}))`,
-                    boxShadow: `inset 6px 6px 10px -8px oklch(0 0 0/25%),0 2px 0 0 color-mix(in oklab,${accent} 55%,transparent),0 10px 22px -14px oklch(0 0 0/85%)`,
-                  }
-                : {
-                    background:
-                      "linear-gradient(160deg,#6E7378,#3C4045)",
-                    boxShadow:
-                      "inset 6px 6px 12px -6px oklch(0 0 0/60%),inset -4px -4px 8px -6px oklch(1 0 0/16%),0 10px 22px -14px oklch(0 0 0/85%)",
-                  }
-            }
+            style={{
+              background: `linear-gradient(160deg,color-mix(in oklab,var(--card) 90%,${accent} 10%),color-mix(in oklab,var(--background) 88%,black))`,
+              boxShadow: `inset 6px 6px 10px -6px oklch(0 0 0/70%),inset -4px -4px 8px -6px oklch(1 0 0/12%),0 2px 0 0 color-mix(in oklab,${accent} 35%,transparent),0 10px 22px -14px oklch(0 0 0/85%)`,
+            }}
           >
             <span
               aria-hidden
@@ -103,27 +94,34 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
             />
             <LetterBadge
               letter={letter}
+              active={filled}
               className="size-11 shrink-0 sm:size-12"
               textClassName="text-2xl sm:text-3xl"
             />
             <span className="flex min-w-0 flex-col items-center justify-center gap-1 leading-none">
               {!filled ? (
-                <span className="font-mono text-2xl font-black tracking-tight text-white/60">
+                <span className="font-mono text-2xl font-black tracking-tight text-foreground/35">
                   —
                 </span>
               ) : (
                 ids.slice(0, 2).map((id) => (
                   <span key={id} className="flex min-w-0 flex-col items-center leading-none">
-                    <span className="w-full truncate text-center font-mono text-[0.85rem] tracking-[0.12em] text-black/60">
+                    <span className="w-full truncate text-center font-mono text-[0.85rem] tracking-[0.12em] text-foreground/70">
                       {id.slice(0, -3)}
                     </span>
-                    <span className="mt-1 w-full truncate text-center font-mono text-4xl font-black tracking-tight text-black">
+                    <span
+                      className={cn(
+                        "mt-1 w-full truncate text-center font-mono text-4xl font-black tracking-tight",
+                        picked ? "text-warning" : "text-success"
+                      )}
+                    >
                       {id.slice(-3)}
                     </span>
                   </span>
                 ))
               )}
             </span>
+
 
           </div>
         );
