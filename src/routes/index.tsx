@@ -95,7 +95,9 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
             <LetterBadge
               letter={letter}
               active={filled}
+              highlight={picked}
               className="size-11 shrink-0 sm:size-12"
+
               textClassName="text-2xl sm:text-3xl"
             />
             <span className="flex min-w-0 flex-col items-center justify-center gap-1 leading-none">
