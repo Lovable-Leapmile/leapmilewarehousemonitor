@@ -207,7 +207,7 @@ function ListTracker() {
 
             <div className="border-t border-foreground/20" />
 
-            <PigeonRow holes={pigeonHoles} />
+            <PigeonRow holes={pigeonHoles} pickLetters={pickLetters} />
           </>
         )}
       </div>
