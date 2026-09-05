@@ -190,6 +190,7 @@ function ListTracker() {
                     key={list.id}
                     list={list}
                     letter={list.listLetter || (READY_LETTERS[i] ?? "A")}
+                    highlight={i === 0}
                     className={cn("h-full", i === 0 && "col-span-2")}
                   />
                 ) : (
