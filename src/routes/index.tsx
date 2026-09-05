@@ -153,6 +153,14 @@ function ListTracker() {
   const slotsRef = useRef<(string | null)[]>(Array(READY_SLOTS).fill(null));
   const readySlots = placeSlots(slotsRef.current, ready, byId);
 
+  // Letters currently on the pick list above — their pigeon holes go yellow.
+  const pickLetters = new Set(
+    readySlots
+      .map((l, i) => (l ? l.listLetter || READY_LETTERS[i] || "" : ""))
+      .filter(Boolean)
+      .map((s) => s.toUpperCase())
+  );
+
   return (
     <main className="relative flex h-screen flex-col overflow-hidden bg-background p-2 sm:p-3">
       <div
