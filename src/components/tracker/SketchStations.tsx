@@ -72,7 +72,7 @@ export function SketchStations({
               chip
             )}
           >
-            {shelfLabel(n)}
+            {shelfByStation.get(n) ?? fallbackShelf(n)}
           </span>
         </li>
       ))}
