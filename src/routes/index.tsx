@@ -6,6 +6,7 @@ import { SketchCard } from "@/components/tracker/SketchCard";
 import { LetterBadge } from "@/components/tracker/LetterBadge";
 import { cn } from "@/lib/utils";
 import type { TrackerList } from "@/lib/tracker-types";
+import type { PigeonHole } from "@/lib/tracker.server";
 
 
 export const Route = createFileRoute("/")({
@@ -114,6 +115,7 @@ function ListTracker() {
   const { data } = useQuery({ ...trackerListsQuery, initialData });
 
   const incoming = data?.lists ?? [];
+  const pigeonHoles = data?.pigeonHoles ?? [];
   const byId = new Map(incoming.map((l) => [l.id, l]));
 
   // The first slot is the full-width card, so the list with the most reached
@@ -144,7 +146,7 @@ function ListTracker() {
 
       {/* outer bordered container, as in the sketch */}
       <div className="relative mx-auto flex min-h-0 w-full flex-1 flex-col gap-2 rounded-2xl border-2 border-border/60 bg-card/40 p-2 backdrop-blur sm:gap-3 sm:p-3">
-        {incoming.length === 0 ? (
+        {incoming.length === 0 && pigeonHoles.length === 0 ? (
           <div className="flex min-h-0 flex-1 items-center justify-center">
             <p className="font-mono text-3xl font-bold tracking-[0.2em] text-foreground/60 sm:text-5xl">
               NO LIST AVAILABLE
@@ -175,7 +177,7 @@ function ListTracker() {
 
             <div className="border-t border-foreground/20" />
 
-            <PigeonRow lists={ready.length >= 8 ? ready : [...ready, ...pending]} />
+            <PigeonRow holes={pigeonHoles} />
           </>
         )}
       </div>
