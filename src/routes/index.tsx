@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { trackerListsQuery } from "@/lib/tracker.queries";
 import { SketchCard } from "@/components/tracker/SketchCard";
 import { LetterBadge } from "@/components/tracker/LetterBadge";
-import { DUMMY_LISTS } from "@/lib/tracker-dummy";
 import { cn } from "@/lib/utils";
 import type { TrackerList } from "@/lib/tracker-types";
 
