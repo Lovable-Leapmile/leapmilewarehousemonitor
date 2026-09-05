@@ -31,3 +31,5 @@ export type TrackerList = {
   /** arrived shelves: station number + last 4 of the shelf id ("00-12") */
   stops?: { station: number; shelf: string }[];
 };
+
+export type PigeonHole = { letter: string; listIds: string[] };

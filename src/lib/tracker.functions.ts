@@ -1,11 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
-import { buildLists, fetchInProgressOrders, fetchReadyOrders } from "./tracker.server";
+import {
+  buildLists,
+  buildPigeonHoles,
+  fetchInProgressOrders,
+  fetchPickReadyOrders,
+  fetchReadyOrders,
+} from "./tracker.server";
 
 export const getTrackerLists = createServerFn({ method: "GET" }).handler(async () => {
-  const [inProgress, ready] = await Promise.all([
+  const [inProgress, ready, pickReady] = await Promise.all([
     fetchInProgressOrders(),
     fetchReadyOrders(),
+    fetchPickReadyOrders(),
   ]);
   const lists = buildLists(inProgress, ready);
-  return { lists, live: lists.length > 0 };
+  const pigeonHoles = buildPigeonHoles(pickReady);
+  return { lists, pigeonHoles, live: lists.length > 0 || pigeonHoles.length > 0 };
 });
