@@ -1,6 +1,6 @@
-import { STATIONS_PER_SIDE, type Side, type TrackerList } from "./tracker-types";
+import { STATIONS_PER_SIDE, type PigeonHole, type Side, type TrackerList } from "./tracker-types";
 
-export type { Side, TrackerList };
+export type { PigeonHole, Side, TrackerList };
 
 const API_BASE = "https://testpod.leapmile.com/nanostore/orders";
 const FALLBACK_TOKEN =
@@ -181,8 +181,6 @@ export function buildLists(
     return b.listId.localeCompare(a.listId);
   });
 }
-
-export type PigeonHole = { letter: string; listIds: string[] };
 
 /** Completed trays whose list is ready to be picked from the pigeon holes. */
 export function fetchPickReadyOrders() {

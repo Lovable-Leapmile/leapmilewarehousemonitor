@@ -5,8 +5,7 @@ import { trackerListsQuery } from "@/lib/tracker.queries";
 import { SketchCard } from "@/components/tracker/SketchCard";
 import { LetterBadge } from "@/components/tracker/LetterBadge";
 import { cn } from "@/lib/utils";
-import type { TrackerList } from "@/lib/tracker-types";
-import type { PigeonHole } from "@/lib/tracker.server";
+import type { PigeonHole, TrackerList } from "@/lib/tracker-types";
 
 
 export const Route = createFileRoute("/")({
@@ -125,7 +124,6 @@ function ListTracker() {
   const ready = incoming
     .filter((l) => l.status === "ready")
     .sort((a, b) => dotCount(b) - dotCount(a));
-  const pending = incoming.filter((l) => l.status === "inprogress");
 
   // Fixed slots in the ready view: a card keeps its slot for its lifetime;
   // when it disappears the slot frees up for the next ready list.
