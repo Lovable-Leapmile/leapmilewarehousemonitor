@@ -181,3 +181,31 @@ export function buildLists(
     return b.listId.localeCompare(a.listId);
   });
 }
+
+export type PigeonHole = { letter: string; listIds: string[] };
+
+/** Completed trays whose list is ready to be picked from the pigeon holes. */
+export function fetchPickReadyOrders() {
+  return getOrders(
+    "tray_status=completed&status=inactive&list_status=ready_to_pick&order_by_field=updated_at&order_by_type=ASC"
+  );
+}
+
+/** One entry per badge (pigeon hole) with the distinct list ids inside it. */
+export function buildPigeonHoles(orders: OrderRecord[]): PigeonHole[] {
+  const holes = new Map<string, Set<string>>();
+  for (const o of orders) {
+    const letter = (o.metadata?.badge ?? "").trim().toUpperCase();
+    const listId = o.metadata?.list_id ?? "";
+    if (!letter || !listId) continue;
+    let set = holes.get(letter);
+    if (!set) {
+      set = new Set<string>();
+      holes.set(letter, set);
+    }
+    set.add(listId);
+  }
+  return [...holes.entries()]
+    .map(([letter, set]) => ({ letter, listIds: [...set] }))
+    .sort((a, b) => a.letter.localeCompare(b.letter));
+}
