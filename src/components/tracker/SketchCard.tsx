@@ -56,7 +56,7 @@ export function SketchCard({
 
       <SketchStations
         sides={list.sides}
-        stops={list.stops}
+        stops={list.stops ?? []}
         tone={ready ? "success" : "warning"}
         className="min-w-0 flex-1 pl-3 pr-1 sm:pl-4 sm:pr-1"
       />
