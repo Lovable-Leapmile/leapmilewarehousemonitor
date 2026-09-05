@@ -28,4 +28,6 @@ export type TrackerList = {
   total: number;
   /** length 24 per side, index 0 = station 24 … index 23 = station 01 */
   sides: Record<Side, boolean[]>;
+  /** arrived shelves: station number + last 4 of the shelf id ("00-12") */
+  stops?: { station: number; shelf: string }[];
 };

@@ -21,27 +21,25 @@ function reachedStations(sides: Record<Side, boolean[]>) {
 const CIRCLE_SIZE = "size-[5.5rem]";
 const CIRCLE_TEXT = "text-[2.5rem]";
 
-/**
- * Last 4 digits of the shelf ID, formatted "00-12". Shelf IDs are unrelated to
- * the station number, so the value is scrambled deterministically (stable per
- * station, never simply mirroring the dot number).
- */
-function shelfLabel(station: number) {
-  const h = (station * 2654435761) % 9973;
-  const raw = String(h % 10000).padStart(4, "0");
+/** Fallback shelf label when the feed has no tray id for a station. */
+function fallbackShelf(station: number) {
+  const raw = String(((station * 2654435761) % 9973) % 10000).padStart(4, "0");
   return `${raw.slice(0, 2)}-${raw.slice(2)}`;
 }
 
 export function SketchStations({
   sides,
+  stops,
   tone = "success",
   className,
 }: {
   sides: Record<Side, boolean[]>;
+  stops?: { station: number; shelf: string }[];
   tone?: "success" | "warning";
   className?: string;
 }) {
-  const stations = reachedStations(sides);
+  const shelfByStation = new Map((stops ?? []).map((s) => [s.station, s.shelf]));
+  const stations = stops?.length ? stops.map((s) => s.station) : reachedStations(sides);
   const circle =
     tone === "warning"
       ? "border-warning/70 bg-warning/10 text-warning"
@@ -74,7 +72,7 @@ export function SketchStations({
               chip
             )}
           >
-            {shelfLabel(n)}
+            {shelfByStation.get(n) ?? fallbackShelf(n)}
           </span>
         </li>
       ))}
