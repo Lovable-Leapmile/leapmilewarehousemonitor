@@ -11,12 +11,15 @@ export function SketchCard({
   list,
   letter,
   className,
+  highlight = false,
 }: {
   list: TrackerList;
   letter?: string;
   className?: string;
+  /** Top pick list — rendered in the yellow accent. */
+  highlight?: boolean;
 }) {
-  const ready = list.status === "ready";
+  const ready = list.status === "ready" && !highlight;
   const head = list.listId.slice(0, -3);
   const tail = list.listId.slice(-3);
 
@@ -24,7 +27,8 @@ export function SketchCard({
     <article
       className={cn(
         "relative flex min-h-0 min-w-0 items-stretch gap-1 overflow-hidden rounded-2xl border-2 bg-card/80 py-3 pl-2 pr-2 backdrop-blur sm:gap-2 sm:py-4 sm:pl-2 sm:pr-2",
-        ready ? "border-success/55" : "border-warning/50",
+        ready ? "border-success/55" : "border-warning/70",
+        highlight && "bg-[color-mix(in_oklab,var(--card)_88%,var(--warning)_12%)]",
         className
       )}
     >
@@ -40,7 +44,7 @@ export function SketchCard({
         <span
           className={cn(
             "font-mono text-8xl font-black tracking-tight sm:text-[6.5rem]",
-            ready ? "text-success" : "text-foreground"
+            ready ? "text-success" : "text-warning"
           )}
         >
           {tail}
