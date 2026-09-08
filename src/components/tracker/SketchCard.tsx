@@ -19,7 +19,8 @@ export function SketchCard({
   /** Top pick list — rendered in the yellow accent. */
   highlight?: boolean;
 }) {
-  const ready = list.status === "ready" && !highlight;
+  // All pick lists render in the yellow accent — green is no longer used here.
+  const ready = false;
   const head = list.listId.slice(0, -3);
   const tail = list.listId.slice(-3);
 
