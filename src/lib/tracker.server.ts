@@ -2,7 +2,7 @@ import { STATIONS_PER_SIDE, type PigeonHole, type Side, type TrackerList } from 
 
 export type { PigeonHole, Side, TrackerList };
 
-const API_BASE = "https://testpod.leapmile.com/nanostore/orders";
+const API_BASE = "https://multirobot1.leapmile.com/nanostore/orders";
 const FALLBACK_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
 
@@ -23,7 +23,7 @@ export type OrderRecord = {
   created_at: string | null;
   updated_at: string | null;
   user_id: number | null;
-  tray_id: string | null;
+  bin_id: string | null;
   tray_status: string | null;
   station_id: string | null;
   station_friendly_name: string | null;
@@ -142,7 +142,7 @@ export function buildLists(
       station ??= order.station_friendly_name ?? null;
       stops.push({
         station: spot.side === "A" ? spot.station : spot.station + STATIONS_PER_SIDE,
-        shelf: shelfLabel(order.tray_id),
+        shelf: shelfLabel(order.bin_id),
       });
     }
 
