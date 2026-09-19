@@ -11,20 +11,27 @@ import type { PigeonHole, TrackerList } from "@/lib/tracker-types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Leapmile List Tracker — Shelves at Stations" },
+      { title: "Leapmile Robotics | Robot Information Dashboard" },
       {
         name: "description",
         content:
-          "Live Leapmile list tracker: pick-list status, operator assignment, and shelf arrivals across 24 stations on each side of the aisle.",
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
       },
-      { property: "og:title", content: "Leapmile List Tracker — Shelves at Stations" },
+      { property: "og:title", content: "Leapmile Robotics | Robot Information Dashboard" },
       {
         property: "og:description",
         content:
-          "Real-time pick-list board showing READY and IN PROGRESS lists with shelf arrivals at every station.",
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:site_name", content: "Leapmile Robotics" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Leapmile Robotics | Robot Information Dashboard" },
+      {
+        name: "twitter:description",
+        content:
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
+      },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(trackerListsQuery),
