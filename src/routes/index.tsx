@@ -195,35 +195,27 @@ function ListTracker() {
           </div>
         ) : (
           <>
-            {ready.length === 0 ? (
-              <section className="flex min-h-0 flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-border/40 bg-card/20">
-                <p className="text-center font-mono text-3xl font-bold tracking-[0.2em] text-foreground/60 sm:text-5xl">
-                  NO LIST AVAILABLE
-                </p>
-              </section>
-            ) : (
-              <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-3 gap-2 sm:gap-3">
-                {readySlots.map((list, i) =>
-                  list ? (
-                    <SketchCard
-                      key={list.id}
-                      list={list}
-                      letter={list.listLetter || (READY_LETTERS[i] ?? "A")}
-                      highlight={i === 0}
-                      className={cn("h-full", i === 0 && "col-span-2")}
-                    />
-                  ) : (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20",
-                        i === 0 && "col-span-2"
-                      )}
-                    />
-                  )
-                )}
-              </section>
-            )}
+            <section className="grid min-h-0 flex-1 grid-cols-2 grid-rows-3 gap-2 sm:gap-3">
+              {readySlots.map((list, i) =>
+                list ? (
+                  <SketchCard
+                    key={list.id}
+                    list={list}
+                    letter={list.listLetter || (READY_LETTERS[i] ?? "A")}
+                    highlight={i === 0}
+                    className={cn("h-full", i === 0 && "col-span-2")}
+                  />
+                ) : (
+                  <div
+                    key={i}
+                    className={cn(
+                      "h-full min-h-0 rounded-2xl border-2 border-dashed border-border/40 bg-card/20",
+                      i === 0 && "col-span-2"
+                    )}
+                  />
+                )
+              )}
+            </section>
 
             <div className="border-t border-foreground/20" />
 
