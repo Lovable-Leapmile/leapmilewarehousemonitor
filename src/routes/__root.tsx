@@ -77,20 +77,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Leapmile Warehouse Automation Dashboard" },
+      { title: "Leapmile Robotics | Robot Information Dashboard" },
       {
         name: "description",
-        content: "Live shelf-to-station monitoring for warehouse automation operators.",
+        content:
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
       },
-      { name: "author", content: "Leapmile" },
-      { property: "og:title", content: "Leapmile Warehouse Automation Dashboard" },
+      { name: "author", content: "Leapmile Robotics" },
+      { property: "og:title", content: "Leapmile Robotics | Robot Information Dashboard" },
       {
         property: "og:description",
-        content: "Live shelf-to-station monitoring for warehouse automation operators.",
+        content:
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Leapmile Robotics" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Leapmile Robotics | Robot Information Dashboard" },
+      {
+        name: "twitter:description",
+        content:
+          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
