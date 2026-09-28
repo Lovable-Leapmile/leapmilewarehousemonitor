@@ -1,42 +1,10 @@
 import { useRef } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { trackerListsQuery } from "@/lib/tracker.queries";
 import { SketchCard } from "@/components/tracker/SketchCard";
 import { LetterBadge } from "@/components/tracker/LetterBadge";
 import { cn } from "@/lib/utils";
 import type { PigeonHole, TrackerList } from "@/lib/tracker-types";
-
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Leapmile Robotics | Robot Information Dashboard" },
-      {
-        name: "description",
-        content:
-          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
-      },
-      { property: "og:title", content: "Leapmile Robotics | Robot Information Dashboard" },
-      {
-        property: "og:description",
-        content:
-          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "Leapmile Robotics" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "Leapmile Robotics | Robot Information Dashboard" },
-      {
-        name: "twitter:description",
-        content:
-          "Leapmile Robotics Robot Information Dashboard - Monitor, configure, and manage your warehouse automation systems",
-      },
-    ],
-  }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(trackerListsQuery),
-  component: ListTracker,
-});
 
 const READY_SLOTS = 5;
 
@@ -78,7 +46,7 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
         const ids = byLetter.get(letter)?.listIds ?? [];
         const filled = ids.length > 0;
         const picked = pickLetters.has(letter);
-        const accent = picked ? "var(--warning)" : filled ? "var(--success)" : "var(--muted)";
+        const accent = picked ? "hsl(var(--warning))" : filled ? "hsl(var(--success))" : "hsl(var(--muted))";
         return (
           <div
             key={`pigeon-${letter}`}
@@ -91,8 +59,8 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
                   : "border-foreground/10"
             )}
             style={{
-              background: `linear-gradient(160deg,color-mix(in oklab,var(--card) 90%,${accent} 10%),color-mix(in oklab,var(--background) 88%,black))`,
-              boxShadow: `inset 6px 6px 10px -6px oklch(0 0 0/70%),inset -4px -4px 8px -6px oklch(1 0 0/12%),0 2px 0 0 color-mix(in oklab,${accent} 35%,transparent),0 10px 22px -14px oklch(0 0 0/85%)`,
+              background: `linear-gradient(160deg,color-mix(in srgb,hsl(var(--card)) 90%,${accent} 10%),color-mix(in srgb,hsl(var(--background)) 88%,black))`,
+              boxShadow: `inset 6px 6px 10px -6px oklch(0 0 0/70%),inset -4px -4px 8px -6px oklch(1 0 0/12%),0 2px 0 0 color-mix(in srgb,${accent} 35%,transparent),0 10px 22px -14px oklch(0 0 0/85%)`,
             }}
           >
             <span
@@ -104,7 +72,6 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
               active={filled}
               highlight={picked}
               className="size-11 shrink-0 sm:size-12"
-
               textClassName="text-2xl sm:text-3xl"
             />
             <span className="flex min-w-0 flex-col items-center justify-center gap-1 leading-none">
@@ -130,8 +97,6 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
                 ))
               )}
             </span>
-
-
           </div>
         );
       })}
@@ -139,14 +104,10 @@ function PigeonRow({ holes, pickLetters }: { holes: PigeonHole[]; pickLetters: S
   );
 }
 
-
-
-
 const READY_LETTERS = "GHIJK".split("");
 
-function ListTracker() {
-  const initialData = Route.useLoaderData();
-  const { data } = useQuery({ ...trackerListsQuery, initialData });
+export default function ListTrackerPage() {
+  const { data } = useQuery(trackerListsQuery);
 
   const incoming = data?.lists ?? [];
   const pigeonHoles = data?.pigeonHoles ?? [];
@@ -177,11 +138,14 @@ function ListTracker() {
     <main className="relative flex h-screen flex-col overflow-hidden bg-background p-2 sm:p-3">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:64px_64px]"
+        className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] [background-size:64px_64px]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-1/3 left-1/2 size-[70vw] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--brand)_22%,transparent),transparent_65%)] blur-3xl"
+        className="pointer-events-none absolute -top-1/3 left-1/2 size-[70vw] -translate-x-1/2 rounded-full blur-3xl"
+        style={{
+          background: "radial-gradient(circle, color-mix(in srgb, hsl(var(--brand)) 22%, transparent), transparent 65%)",
+        }}
       />
       <h1 className="sr-only">Warehouse task monitoring dashboard</h1>
 
@@ -226,5 +190,3 @@ function ListTracker() {
     </main>
   );
 }
-
-

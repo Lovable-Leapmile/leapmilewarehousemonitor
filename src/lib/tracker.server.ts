@@ -2,7 +2,7 @@ import { STATIONS_PER_SIDE, type PigeonHole, type Side, type TrackerList } from 
 
 export type { PigeonHole, Side, TrackerList };
 
-const API_BASE = "https://multirobot1.leapmile.com/nanostore/orders";
+const API_BASE = "/nanostore/orders";
 const FALLBACK_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
 
@@ -32,7 +32,7 @@ export type OrderRecord = {
 
 async function getOrders(query: string): Promise<OrderRecord[]> {
   try {
-    const token = process.env["LEAPMILE_API_TOKEN"] ?? FALLBACK_TOKEN;
+    const token = import.meta.env.VITE_LEAPMILE_API_TOKEN ?? FALLBACK_TOKEN;
     const res = await fetch(`${API_BASE}?${query}`, {
       headers: { accept: "application/json", Authorization: `Bearer ${token}` },
     });
