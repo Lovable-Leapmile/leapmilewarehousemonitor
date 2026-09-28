@@ -1,18 +1,5 @@
-import { STATIONS_PER_SIDE, SIDES, type Side, type TrackerList } from "@/lib/tracker-types";
+import type { TrackerList } from "@/lib/tracker-types";
 import { cn } from "@/lib/utils";
-
-const OFFSET: Record<Side, number> = { A: 0, B: STATIONS_PER_SIDE };
-
-function reachedStations(sides: Record<Side, boolean[]>) {
-  const out: number[] = [];
-  for (const side of SIDES) {
-    const slots = sides[side];
-    for (let i = slots.length - 1; i >= 0; i--) {
-      if (slots[i] === true) out.push(STATIONS_PER_SIDE - i + OFFSET[side]);
-    }
-  }
-  return out;
-}
 
 /**
  * Station markers: a wrapping run of circled numbers, all rendered with a
@@ -22,19 +9,16 @@ const CIRCLE_SIZE = "size-[5.5rem]";
 const CIRCLE_TEXT = "text-[2.5rem]";
 
 export function SketchStations({
-  sides,
   stops,
   tone = "success",
   className,
 }: {
-  sides: Record<Side, boolean[]>;
   stops?: TrackerList["stops"];
   tone?: "success" | "warning";
   className?: string;
 }) {
-  const trays = stops?.length
-    ? stops.map((stop) => ({ key: stop.orderId, name: stop.stationName, binId: stop.binId }))
-    : reachedStations(sides).map((station) => ({ key: station, name: String(station), binId: "—" }));
+  // Keep the station and bin from the same tray record; never invent station numbers.
+  const trays = stops ?? [];
   const circle =
     tone === "warning"
       ? "border-warning/70 bg-warning/10 text-warning"
@@ -48,17 +32,17 @@ export function SketchStations({
   return (
     <ul className={cn("flex flex-wrap content-center items-start gap-x-1 gap-y-2", className)}>
       {trays.map((tray) => (
-        <li key={tray.key} className="flex w-[7.5rem] shrink-0 flex-col items-center text-center">
+        <li key={tray.orderId} className="flex w-[10rem] shrink-0 flex-col items-center text-center">
           <span
             className={cn(
               "grid place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
               circle,
               CIRCLE_SIZE,
-              tray.name.length > 2 ? "text-[1.65rem]" : CIRCLE_TEXT,
+              tray.stationName.length > 2 ? "text-[1.65rem]" : CIRCLE_TEXT,
               "whitespace-nowrap"
             )}
           >
-            {tray.name}
+            {tray.stationName}
           </span>
           {/* Shelf ID chip overlaps the circle it belongs to, so the pairing
               is unambiguous even when rows sit close together. */}
@@ -70,7 +54,7 @@ export function SketchStations({
           >
             {tray.binId === "—" ? "—" : tray.binId.slice(-5)}
           </span>
-          <span className="mt-1 w-full min-w-0 break-all font-mono text-[0.65rem] font-semibold leading-tight text-foreground/80" title={tray.binId}>
+          <span className="mt-1 w-full min-w-0 break-all font-mono text-[0.82rem] font-semibold leading-tight text-foreground" title={tray.binId}>
             {tray.binId}
           </span>
         </li>
