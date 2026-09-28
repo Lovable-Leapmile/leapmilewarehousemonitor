@@ -54,7 +54,8 @@ export function SketchStations({
               "grid place-items-center rounded-full border-2 font-mono font-semibold tabular-nums opacity-100",
               circle,
               CIRCLE_SIZE,
-              CIRCLE_TEXT
+              tray.name.length > 2 ? "text-[1.65rem]" : CIRCLE_TEXT,
+              "whitespace-nowrap"
             )}
           >
             {tray.name}
@@ -69,7 +70,7 @@ export function SketchStations({
           >
             {tray.binId === "—" ? "—" : tray.binId.slice(-5)}
           </span>
-          <span className="mt-1 w-full break-all font-mono text-xs font-semibold leading-tight text-foreground/80" title={tray.binId}>
+          <span className="mt-1 w-full min-w-0 break-all font-mono text-[0.65rem] font-semibold leading-tight text-foreground/80" title={tray.binId}>
             {tray.binId}
           </span>
         </li>
