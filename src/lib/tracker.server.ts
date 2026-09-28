@@ -58,9 +58,9 @@ export function fetchReadyOrders() {
   );
 }
 
-/** "S-01" / "S-1-1-2-1" -> { side, station } */
+/** Map a valid physical station to the legacy side grid; display uses the original name. */
 function locate(order: OrderRecord): { side: Side; station: number } | null {
-  const m = /(\d{1,2})/.exec(order.station_friendly_name ?? "");
+  const m = /^(?:S-)?(\d{1,2})$/.exec((order.station_friendly_name ?? "").trim());
   if (m) {
     const n = Number(m[1]);
     if (n >= 1 && n <= STATIONS_PER_SIDE) return { side: "A", station: n };
@@ -88,12 +88,6 @@ function emptySides(): Record<Side, boolean[]> {
 /** Station 24 is rendered first, station 01 last. */
 function slotIndex(station: number) {
   return STATIONS_PER_SIDE - station;
-}
-
-/** Last 4 characters of the tray/shelf id, shown as "00-12". */
-function shelfLabel(trayId: string | null): string {
-  const raw = (trayId ?? "").replace(/[^A-Za-z0-9]/g, "").slice(-4).padStart(4, "0");
-  return `${raw.slice(0, 2)}-${raw.slice(2)}`;
 }
 
 function listKey(order: OrderRecord) {
@@ -132,17 +126,18 @@ export function buildLists(
     if (!first) continue;
 
     const sides = emptySides();
-    const stops: { station: number; shelf: string }[] = [];
+    const stops: NonNullable<TrackerList["stops"]> = [];
     let station: string | null = null;
 
     for (const order of group.arrived) {
       const spot = locate(order);
-      if (!spot) continue;
-      sides[spot.side][slotIndex(spot.station)] = true;
+      if (spot) sides[spot.side][slotIndex(spot.station)] = true;
       station ??= order.station_friendly_name ?? null;
       stops.push({
-        station: spot.side === "A" ? spot.station : spot.station + STATIONS_PER_SIDE,
-        shelf: shelfLabel(order.bin_id),
+        orderId: order.id,
+        station: spot ? spot.station + (spot.side === "B" ? STATIONS_PER_SIDE : 0) : null,
+        stationName: order.station_friendly_name?.trim() || "—",
+        binId: order.bin_id?.trim() || "—",
       });
     }
 
@@ -172,7 +167,7 @@ export function buildLists(
       reached,
       total,
       sides,
-      stops: stops.sort((a, b) => a.station - b.station),
+      stops: stops.sort((a, b) => (a.station ?? Infinity) - (b.station ?? Infinity)),
     });
   }
 
