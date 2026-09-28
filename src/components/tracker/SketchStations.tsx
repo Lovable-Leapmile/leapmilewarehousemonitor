@@ -54,9 +54,6 @@ export function SketchStations({
           >
             {tray.binId === "—" ? "—" : tray.binId.slice(-5)}
           </span>
-          <span className="mt-1 w-full min-w-0 break-all font-mono text-[0.82rem] font-semibold leading-tight text-foreground" title={tray.binId}>
-            {tray.binId}
-          </span>
         </li>
       ))}
     </ul>
