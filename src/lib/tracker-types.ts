@@ -3,6 +3,7 @@ export const SIDES = ["A", "B"] as const;
 export type Side = (typeof SIDES)[number];
 
 export type ListKind = "pick" | "put";
+export type OrderType = "putaway" | "pickup";
 
 export const LIST_KIND_LABEL: Record<ListKind, string> = {
   pick: "Picklist",
@@ -15,8 +16,10 @@ export type TrackerList = {
   operatorId: string;
   /** Assigned list letter shown large on the card, e.g. "A", "B", "C" */
   listLetter: string;
-  /** Picklist vs Putlist — placeholder until the feed exposes a type field */
+  /** Legacy list kind; never use this to infer the API order type. */
   kind: ListKind;
+  /** Live order type from metadata.type, when provided by the API. */
+  orderType?: OrderType | null;
   status: "ready" | "inprogress";
 
   /** absolute deadline epoch-ms — only for status "ready" */
