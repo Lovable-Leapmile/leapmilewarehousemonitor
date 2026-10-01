@@ -33,6 +33,19 @@ Deno.serve(async (request) => {
     );
     const payload = await response.text();
 
+    // Leapmile uses 404 to mean that this valid filter currently has no rows.
+    // Return an empty successful feed so polling continues without a runtime error.
+    if (response.status === 404) {
+      return new Response(JSON.stringify({ status: "success", status_code: 200, count: 0, records: [] }), {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+
     return new Response(payload, {
       status: response.status,
       headers: {
