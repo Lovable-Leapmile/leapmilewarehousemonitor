@@ -1,10 +1,9 @@
 import { STATIONS_PER_SIDE, type OrderType, type PigeonHole, type Side, type TrackerList } from "./tracker-types";
+import { supabase } from "@/integrations/supabase/client";
 
 export type { PigeonHole, Side, TrackerList };
 
-const API_BASE = "/nanostore/orders";
-const FALLBACK_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
+type OrderFeed = "inprogress" | "ready" | "pick-ready";
 
 type OrderMetadata = {
   type?: string | null;
@@ -31,15 +30,13 @@ export type OrderRecord = {
   auto_complete_time: number | null;
 };
 
-async function getOrders(query: string): Promise<OrderRecord[]> {
+async function getOrders(feed: OrderFeed): Promise<OrderRecord[]> {
   try {
-    const token = import.meta.env.VITE_LEAPMILE_API_TOKEN ?? FALLBACK_TOKEN;
-    const res = await fetch(`${API_BASE}?${query}`, {
-      headers: { accept: "application/json", Authorization: `Bearer ${token}` },
+    const { data, error } = await supabase.functions.invoke("leapmile-orders", {
+      body: { feed },
     });
-    if (!res.ok) return [];
-    const json = (await res.json()) as { records?: OrderRecord[] };
-    return json.records ?? [];
+    if (error) return [];
+    return (data as { records?: OrderRecord[] } | null)?.records ?? [];
   } catch {
     return [];
   }
@@ -47,16 +44,12 @@ async function getOrders(query: string): Promise<OrderRecord[]> {
 
 /** Trays still travelling — their lists are IN PROGRESS. */
 export function fetchInProgressOrders() {
-  return getOrders(
-    "tray_status=inprogress&status=active&order_by_field=created_at&order_by_type=ASC"
-  );
+  return getOrders("inprogress");
 }
 
 /** Trays that arrived at a station (e.g. "S-01") — READY candidates. */
 export function fetchReadyOrders() {
-  return getOrders(
-    "tray_status=tray_ready_to_use&status=active&order_by_field=updated_at&order_by_type=ASC"
-  );
+  return getOrders("ready");
 }
 
 /** Map a valid physical station to the legacy side grid; display uses the original name. */
@@ -186,9 +179,7 @@ export function buildLists(
 
 /** Completed trays whose list is ready to be picked from the pigeon holes. */
 export function fetchPickReadyOrders() {
-  return getOrders(
-    "tray_status=completed&status=inactive&list_status=ready_to_pick&order_by_field=updated_at&order_by_type=ASC"
-  );
+  return getOrders("pick-ready");
 }
 
 /** One entry per badge (pigeon hole) with the distinct list ids inside it. */
