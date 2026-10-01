@@ -29,17 +29,13 @@ export type OrderRecord = {
 };
 
 async function getOrders(query: string): Promise<OrderRecord[]> {
-  try {
-    const params = Object.fromEntries(new URLSearchParams(query));
-    const { data, error } = await supabase.functions.invoke("leapmile-orders", {
-      body: { query: params },
-    });
-    if (error) return [];
-    const payload = data as { records?: OrderRecord[] } | null;
-    return payload?.records ?? [];
-  } catch {
-    return [];
-  }
+  const params = Object.fromEntries(new URLSearchParams(query));
+  const { data, error } = await supabase.functions.invoke("leapmile-orders", {
+    body: { query: params },
+  });
+  if (error) throw error;
+  const payload = data as { records?: OrderRecord[] } | null;
+  return payload?.records ?? [];
 }
 
 /** Trays still travelling — their lists are IN PROGRESS. */
