@@ -42,6 +42,34 @@ Deno.serve(async (request) => {
     );
 
     const body = await response.text();
+
+    // The warehouse API uses 404 to mean a valid, currently empty feed.
+    // Normalize only that documented response so polling stays successful;
+    // genuine upstream failures still retain their original status code.
+    if (response.status === 404) {
+      let payload: { message?: string; status?: string } | null = null;
+      try {
+        payload = JSON.parse(body) as { message?: string; status?: string };
+      } catch {
+        payload = null;
+      }
+
+      if (payload?.message?.toLowerCase() === "no records found") {
+        return new Response(
+          JSON.stringify({
+            status: "success",
+            status_code: 200,
+            count: 0,
+            records: [],
+          }),
+          {
+            status: 200,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          },
+        );
+      }
+    }
+
     return new Response(body, {
       status: response.status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
