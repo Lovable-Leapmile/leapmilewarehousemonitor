@@ -54,7 +54,7 @@ export function SketchCard({
         {list.orderType && (
           <span
             className={cn(
-              "mt-1 rounded-sm border px-2 py-1 font-sans text-sm font-extrabold leading-none sm:text-base",
+              "mt-1 rounded-sm border px-2.5 py-1.5 font-sans text-base font-extrabold leading-none sm:text-lg",
               list.orderType === "putaway"
                 ? "border-put bg-put text-put-foreground"
                 : "border-pick bg-pick text-pick-foreground"
