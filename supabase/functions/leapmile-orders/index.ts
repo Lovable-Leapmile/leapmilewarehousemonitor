@@ -1,3 +1,7 @@
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { z } from "npm:zod@3.23.8";
+import { fetchWithRetry, UpstreamUnavailableError } from "./request.ts";
+
 const ALLOWED_FILTERS = new Set([
   "tray_status",
   "status",
@@ -6,10 +10,9 @@ const ALLOWED_FILTERS = new Set([
   "order_by_type",
 ]);
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+const BodySchema = z.object({
+  query: z.record(z.string()).optional().default({}),
+});
 
 Deno.serve(async (request) => {
   if (request.method === "OPTIONS") {
@@ -17,17 +20,24 @@ Deno.serve(async (request) => {
   }
 
   try {
-    const body = (await request.json()) as { query?: Record<string, string> };
+    const parsed = BodySchema.safeParse(await request.json());
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: "Invalid order query" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const params = new URLSearchParams();
 
-    for (const [key, value] of Object.entries(body.query ?? {})) {
-      if (ALLOWED_FILTERS.has(key) && typeof value === "string") params.set(key, value);
+    for (const [key, value] of Object.entries(parsed.data.query)) {
+      if (ALLOWED_FILTERS.has(key)) params.set(key, value);
     }
 
     const token = Deno.env.get("LEAPMILE_API_TOKEN");
     if (!token) throw new Error("LEAPMILE_API_TOKEN is not configured");
 
-    const response = await fetch(
+    const response = await fetchWithRetry(
       `https://multirobot1.leapmile.com/nanostore/orders?${params.toString()}`,
       { headers: { accept: "application/json", Authorization: `Bearer ${token}` } },
     );
@@ -55,8 +65,11 @@ Deno.serve(async (request) => {
       },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Request failed" }), {
-      status: 500,
+    const unavailable = error instanceof UpstreamUnavailableError;
+    return new Response(JSON.stringify({
+      error: unavailable ? "Order service temporarily unavailable" : "Request failed",
+    }), {
+      status: unavailable ? 503 : 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

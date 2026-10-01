@@ -7,6 +7,7 @@ export const trackerListsQuery = queryOptions({
   refetchInterval: 2_000,
   refetchIntervalInBackground: true,
   refetchOnWindowFocus: true,
+  retry: false,
   staleTime: 0,
   gcTime: 60_000,
 });
