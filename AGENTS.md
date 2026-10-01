@@ -1,1 +1,2 @@
 Order type indicators on the ready-list cards must come from API `metadata.type`, never the legacy ID-parity `kind`, because the latter is not a real order classification.
+Warehouse API requests must go through the `leapmile-orders` Cloud function so production never depends on Vite's development-only proxy and the bearer token stays server-side.
