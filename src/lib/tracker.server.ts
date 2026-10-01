@@ -28,14 +28,21 @@ export type OrderRecord = {
   auto_complete_time: number | null;
 };
 
+const lastSuccessfulOrders = new Map<string, OrderRecord[]>();
+
 async function getOrders(query: string): Promise<OrderRecord[]> {
   const params = Object.fromEntries(new URLSearchParams(query));
   const { data, error } = await supabase.functions.invoke("leapmile-orders", {
     body: { query: params },
   });
-  if (error) throw error;
-  const payload = data as { records?: OrderRecord[] } | null;
-  return payload?.records ?? [];
+  if (error) return lastSuccessfulOrders.get(query) ?? [];
+
+  const payload = data as { records?: OrderRecord[]; unavailable?: boolean } | null;
+  if (payload?.unavailable) return lastSuccessfulOrders.get(query) ?? [];
+
+  const records = payload?.records ?? [];
+  lastSuccessfulOrders.set(query, records);
+  return records;
 }
 
 /** Trays still travelling — their lists are IN PROGRESS. */

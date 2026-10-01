@@ -66,10 +66,31 @@ Deno.serve(async (request) => {
     });
   } catch (error) {
     const unavailable = error instanceof UpstreamUnavailableError;
+
+    // A temporary upstream outage is a valid polling state, not a function
+    // failure. Returning 200 lets the client retain its last successful feed
+    // without the platform reporting a runtime error or blanking the board.
+    if (unavailable) {
+      return new Response(JSON.stringify({
+        status: "degraded",
+        status_code: 200,
+        count: 0,
+        records: [],
+        unavailable: true,
+      }), {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+
     return new Response(JSON.stringify({
-      error: unavailable ? "Order service temporarily unavailable" : "Request failed",
+      error: "Request failed",
     }), {
-      status: unavailable ? 503 : 500,
+      status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
