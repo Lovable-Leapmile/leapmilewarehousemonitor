@@ -51,6 +51,19 @@ export function SketchCard({
           {tail}
         </span>
 
+        {list.orderType && (
+          <span
+            className={cn(
+              "mt-1 rounded-sm border px-2 py-1 font-sans text-sm font-extrabold leading-none sm:text-base",
+              list.orderType === "putaway"
+                ? "border-put bg-put text-put-foreground"
+                : "border-pick bg-pick text-pick-foreground"
+            )}
+          >
+            {list.orderType.toUpperCase()}
+          </span>
+        )}
+
         {/* letter badge sits below the list ID */}
         <LetterBadge
           letter={letter ?? list.listLetter}

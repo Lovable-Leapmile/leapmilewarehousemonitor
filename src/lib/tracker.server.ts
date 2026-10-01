@@ -1,4 +1,4 @@
-import { STATIONS_PER_SIDE, type PigeonHole, type Side, type TrackerList } from "./tracker-types";
+import { STATIONS_PER_SIDE, type OrderType, type PigeonHole, type Side, type TrackerList } from "./tracker-types";
 
 export type { PigeonHole, Side, TrackerList };
 
@@ -7,6 +7,7 @@ const FALLBACK_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
 
 type OrderMetadata = {
+  type?: string | null;
   qty?: number | null;
   badge?: string | null;
   item_id?: string | null;
@@ -96,6 +97,11 @@ function listKey(order: OrderRecord) {
   );
 }
 
+function orderType(order: OrderRecord): OrderType | null {
+  const type = order.metadata?.type?.toLowerCase();
+  return type === "putaway" || type === "pickup" ? type : null;
+}
+
 /**
  * Groups both feeds by list id. A list is READY only when none of its trays
  * are still in progress; otherwise it is IN PROGRESS.
@@ -161,6 +167,7 @@ export function buildLists(
       listLetter: first.metadata?.badge ?? "A",
       operatorId: first.metadata?.operator_id ?? first.comment?.[1] ?? "",
       kind: anchorId % 2 === 0 ? "pick" : "put",
+      orderType: all.map(orderType).find((type) => type !== null) ?? null,
       status: isReady ? "ready" : "inprogress",
       deadline,
       station,
