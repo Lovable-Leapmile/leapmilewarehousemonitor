@@ -1,10 +1,7 @@
 import { STATIONS_PER_SIDE, type OrderType, type PigeonHole, type Side, type TrackerList } from "./tracker-types";
+import { supabase } from "@/integrations/supabase/client";
 
 export type { PigeonHole, Side, TrackerList };
-
-const API_BASE = "/nanostore/orders";
-const FALLBACK_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2wiOiJhZG1pbiIsImV4cCI6MTkzNTg5Mzk2OX0.dLn79HF199ETJQ3-GHHLcC3UkE31wt7CT_V7FjhKxrg";
 
 type OrderMetadata = {
   type?: string | null;
@@ -33,13 +30,13 @@ export type OrderRecord = {
 
 async function getOrders(query: string): Promise<OrderRecord[]> {
   try {
-    const token = import.meta.env.VITE_LEAPMILE_API_TOKEN ?? FALLBACK_TOKEN;
-    const res = await fetch(`${API_BASE}?${query}`, {
-      headers: { accept: "application/json", Authorization: `Bearer ${token}` },
+    const params = Object.fromEntries(new URLSearchParams(query));
+    const { data, error } = await supabase.functions.invoke("leapmile-orders", {
+      body: { query: params },
     });
-    if (!res.ok) return [];
-    const json = (await res.json()) as { records?: OrderRecord[] };
-    return json.records ?? [];
+    if (error) return [];
+    const payload = data as { records?: OrderRecord[] } | null;
+    return payload?.records ?? [];
   } catch {
     return [];
   }
