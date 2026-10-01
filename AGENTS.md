@@ -1,1 +1,2 @@
 Order type indicators on the ready-list cards must come from API `metadata.type`, never the legacy ID-parity `kind`, because the latter is not a real order classification.
+External Leapmile order requests must pass through the `leapmile-orders` hosted function so periodic polling works in previews and published builds without exposing credentials.
